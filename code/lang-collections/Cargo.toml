@@ -1,0 +1,10 @@
+[package]
+name = "lang-collections"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/lang/collections.md
+# 运行（在 code/ 下）：cargo run -p lang-collections
+
+[dependencies]
+labkit = { workspace = true }

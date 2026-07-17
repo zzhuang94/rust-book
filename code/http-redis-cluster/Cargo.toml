@@ -1,0 +1,11 @@
+[package]
+name = "http-redis-cluster"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tokio = { workspace = true }
+# cluster-async 在 redis-rs 1.x 中开启 Tokio 异步 ClusterConnection。
+redis = { workspace = true, features = ["cluster-async"] }
+labkit = { workspace = true }
+

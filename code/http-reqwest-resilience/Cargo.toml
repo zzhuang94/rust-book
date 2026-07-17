@@ -1,0 +1,16 @@
+[package]
+name = "http-reqwest-resilience"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/http/reqwest-resilience.md
+# 运行（在 code/ 下）：cargo run -p http-reqwest-resilience
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+arc-swap = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

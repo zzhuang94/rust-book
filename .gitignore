@@ -1,0 +1,10 @@
+# Rust 构建产物
+code/target/
+target/
+
+# 编辑器 / 工具缓存
+**/flycheck_*
+**/.flycheck*
+
+# docsify 本地依赖（如用 npm 装 docsify-cli 时）
+node_modules/

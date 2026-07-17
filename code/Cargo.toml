@@ -1,0 +1,78 @@
+[workspace]
+resolver = "2"
+members = [
+    "labkit",
+    "start-toolchain",
+    # 语言地基：一章一 crate，目录名 = docs 子目录 + 文件名（如 lang/basics.md → lang-basics）
+    "lang-basics",
+    "lang-control-flow",
+    "lang-ownership",
+    "lang-functions-closures",
+    "lang-lifetimes",
+    "lang-types-traits",
+    "lang-pattern-matching",
+    "lang-strings-slices",
+    "lang-collections",
+    "lang-iterators",
+    "lang-generics",
+    "lang-smart-pointers",
+    "lang-error-handling",
+    "lang-modules",
+    "concurrency-threads",
+    "network-udp-sockets",
+    "async-basics",
+    "async-tokio",
+    "async-shared-state",
+    "http-http-from-scratch",
+    "http-rest",
+    "http-serde-json",
+    "http-arcswap",
+    "http-middleware-shutdown",
+    "http-redis",
+    "http-redis-cluster",
+    "async-task-control",
+    "async-notify-watch",
+    "async-service-lifecycle",
+    "http-reqwest-resilience",
+    "engineering-testing",
+    "engineering-network-testing",
+    "engineering-tracing",
+    "http-sqlx",
+]
+
+# 统一在这里管理版本，各成员用 `xxx = { workspace = true }` 引用。
+# 类似 Go 里根 go.mod 统一依赖版本。
+[workspace.dependencies]
+tokio = { version = "1", features = ["full"] }
+# CancellationToken 等 Tokio 周边工具（≈ Go 的 context 取消机制）。
+tokio-util = "0.7"
+# macros 特性：提供 #[axum::debug_handler]，把 handler 的天书报错翻译成人话（04a 课 §8）。
+axum = { version = "0.8", features = ["macros"] }
+# rc 特性：让 serde 能直接序列化 Arc<T>（第 06 课 ArcSwap 用得到）。
+serde = { version = "1", features = ["derive", "rc"] }
+arc-swap = "1"
+# tokio-comp：走 Tokio 运行时；connection-manager：自带重连的多路复用连接。
+redis = { version = "1", features = ["tokio-comp", "connection-manager"] }
+# 带毫秒时间戳的日志宏(labkit)所依赖的时间库。
+chrono = "0.4"
+# 课程通用工具 crate，提供 logln! 宏。
+labkit = { path = "labkit" }
+# ---- 工程必备系列（11~13 课）----
+serde_json = "1"
+# tower 的 util 特性提供 ServiceExt::oneshot：不开端口直接测 axum 接口（11 课）。
+tower = { version = "0.5", features = ["util"] }
+http-body-util = "0.1"
+# tracing 三件套：门面 / 订阅端（env-filter 支持 RUST_LOG）/ axum 的请求跟踪层（12 课）。
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tower-http = { version = "0.6", features = ["trace"] }
+# sqlx：异步 SQL 工具箱（13 课）。runtime-tokio 跑在 Tokio 上；macros 提供 FromRow 派生。
+sqlx = { version = "0.8", features = ["runtime-tokio", "postgres", "macros"] }
+# 库风格错误派生（错误处理章），sqlx 章实战使用。
+thiserror = "2"
+# 应用风格错误盒子 + 上下文链（错误处理章）。
+anyhow = "1"
+# 底层 socket 选项：双栈、SO_REUSEPORT、非阻塞转换。
+socket2 = { version = "0.5", features = ["all"] }
+# HTTP 客户端；本教程示例只访问本地 HTTP，所以不额外开启 TLS。
+reqwest = { version = "0.12", default-features = false, features = ["json"] }

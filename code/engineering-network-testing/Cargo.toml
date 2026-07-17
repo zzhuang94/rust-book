@@ -1,0 +1,18 @@
+[package]
+name = "engineering-network-testing"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "engineering_network_testing"
+path = "src/lib.rs"
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+reqwest = { workspace = true }
+serde = { workspace = true }
+anyhow = { workspace = true }
+
+[dev-dependencies]
+serde_json = { workspace = true }

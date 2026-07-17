@@ -1,0 +1,19 @@
+[package]
+name = "http-redis"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "http_redis"
+path = "src/lib.rs"
+
+[[bin]]
+name = "http-redis"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+redis = { workspace = true }
+labkit = { workspace = true }

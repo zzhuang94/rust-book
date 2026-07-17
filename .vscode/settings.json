@@ -1,0 +1,10 @@
+{
+  // 本仓库根目录是 docsify 站点，没有 Cargo.toml；真正的 Rust 工作空间在 code/ 下。
+  // 这一行告诉 rust-analyzer 去加载 code/Cargo.toml，就能正常索引全部 crate。
+  "rust-analyzer.linkedProjects": ["code/Cargo.toml"],
+
+  // 可选：把 docs 和构建产物排除出文件监听，编辑器更轻快。
+  "files.watcherExclude": {
+    "**/code/target/**": true
+  }
+}

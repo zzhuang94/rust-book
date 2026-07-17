@@ -1,0 +1,16 @@
+[package]
+name = "http-sqlx"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "http-sqlx"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+sqlx = { workspace = true }
+thiserror = { workspace = true }
+labkit = { workspace = true }

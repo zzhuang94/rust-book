@@ -1,0 +1,10 @@
+[package]
+name = "lang-smart-pointers"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/lang/smart-pointers.md
+# 运行（在 code/ 下）：cargo run -p lang-smart-pointers
+
+[dependencies]
+labkit = { workspace = true }

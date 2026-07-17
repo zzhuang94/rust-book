@@ -1,0 +1,16 @@
+[package]
+name = "http-middleware-shutdown"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "http-middleware-shutdown"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+labkit = { workspace = true }
+# 直接复用《从零手写 HTTP》的库 crate，不重复写 state/handler/updater。
+# 这也演示了工作区内 crate 之间的路径依赖。
+http-http-from-scratch = { path = "../http-http-from-scratch" }

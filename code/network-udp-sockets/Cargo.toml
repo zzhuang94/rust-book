@@ -1,0 +1,13 @@
+[package]
+name = "network-udp-sockets"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/udp-sockets.md
+# 运行（在 code/ 下）：cargo run -p network-udp-sockets
+
+[dependencies]
+tokio = { workspace = true }
+socket2 = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

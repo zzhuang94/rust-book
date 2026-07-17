@@ -1,0 +1,10 @@
+[package]
+name = "lang-strings-slices"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/lang/strings-slices.md
+# 运行（在 code/ 下）：cargo run -p lang-strings-slices
+
+[dependencies]
+labkit = { workspace = true }

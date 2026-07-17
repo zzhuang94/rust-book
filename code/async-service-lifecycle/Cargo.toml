@@ -1,0 +1,13 @@
+[package]
+name = "async-service-lifecycle"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/async/service-lifecycle.md
+# 运行（在 code/ 下）：cargo run -p async-service-lifecycle
+
+[dependencies]
+tokio = { workspace = true }
+tokio-util = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

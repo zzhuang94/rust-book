@@ -1,0 +1,10 @@
+[package]
+name = "lang-control-flow"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/lang/control-flow.md
+# 运行（在 code/ 下）：cargo run -p lang-control-flow
+
+[dependencies]
+labkit = { workspace = true }

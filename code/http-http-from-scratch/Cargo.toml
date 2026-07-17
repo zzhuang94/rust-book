@@ -1,0 +1,20 @@
+[package]
+name = "http-http-from-scratch"
+version = "0.1.0"
+edition = "2021"
+
+# 采用「lib + bin」布局：核心逻辑放 lib，main.rs 只负责组装启动。
+# 这样逻辑可被测试/复用，和实际项目结构一致。
+[lib]
+name = "http_http_from_scratch"
+path = "src/lib.rs"
+
+[[bin]]
+name = "http-http-from-scratch"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+labkit = { workspace = true }

@@ -1,0 +1,972 @@
+/* ======================================================
+   Theme Variables
+   ====================================================== */
+
+:root {
+  --font-scale: 1;
+  --sidebar-width: 248px;
+  --content-max-width: 1120px;
+
+  /* Light theme (default) */
+  --bg-color: #ffffff;
+  --bg-color-secondary: #f5f7f9;
+  --text-color: #2c3e50;
+  --text-color-secondary: #476582;
+  --heading-color: #2c3e50;
+  --sidebar-bg: #fff;
+  --sidebar-text: #476582;
+  --sidebar-heading: #2c3e50;
+  --sidebar-active: #42b983;
+  --border-color: #eaecef;
+  --inline-code-bg: #e8ecf0;
+  --inline-code-color: #e83e8c;
+  --code-block-bg: #010c05;
+  --code-block-text: #f3f3f3;
+  --link-color: #42b983;
+  --link-hover: #33a06f;
+  --blockquote-bg: transparent;
+  --blockquote-border: #42b983;
+  --blockquote-text: #6a737d;
+  --table-head-bg: #f6f8fa;
+  --table-stripe-bg: #fafbfc;
+  --table-border: #dfe2e5;
+  --search-bg: #ffffff;
+  --search-border: #ccc;
+  --search-text: #2c3e50;
+  --search-result-bg: #ffffff;
+  --search-result-highlight: #42b983;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  --toolbar-bg: rgba(255, 255, 255, 0.92);
+  --toolbar-border: rgba(0, 0, 0, 0.1);
+  --toolbar-text: #555;
+  --toolbar-btn-bg: #f0f0f0;
+  --toolbar-btn-hover: #e0e0e0;
+  --toolbar-btn-active-bg: #42b983;
+  --toolbar-btn-active-text: #fff;
+  --tip-border: #f66;
+  --tip-bg: rgba(255, 102, 102, 0.06);
+  --tip-icon-bg: #f66;
+  --tip-text: var(--text-color);
+  --warn-bg: rgba(66, 185, 131, 0.08);
+  --warn-border: #42b983;
+  --warn-text: var(--text-color);
+  --docsify-example-panels-document-background: var(--bg-color);
+}
+
+html[data-theme="dark"] {
+  --bg-color: #0d1117;
+  --bg-color-secondary: #161b22;
+  --text-color: #c9d1d9;
+  --text-color-secondary: #8b949e;
+  --heading-color: #e6edf3;
+  --sidebar-bg: #0d1117;
+  --sidebar-text: #8b949e;
+  --sidebar-heading: #e6edf3;
+  --sidebar-active: #58a6ff;
+  --border-color: #30363d;
+  --inline-code-bg: #1f2937;
+  --inline-code-color: #ff7b72;
+  --code-block-bg: #1a1f2b;
+  --code-block-text: #e6edf3;
+  --link-color: #58a6ff;
+  --link-hover: #79c0ff;
+  --blockquote-bg: transparent;
+  --blockquote-border: #58a6ff;
+  --blockquote-text: #8b949e;
+  --table-head-bg: #161b22;
+  --table-stripe-bg: #0d1117;
+  --table-border: #30363d;
+  --search-bg: #161b22;
+  --search-border: #30363d;
+  --search-text: #c9d1d9;
+  --search-result-bg: #161b22;
+  --search-result-highlight: #58a6ff;
+  --shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  --toolbar-bg: rgba(22, 27, 34, 0.94);
+  --toolbar-border: rgba(255, 255, 255, 0.08);
+  --toolbar-text: #8b949e;
+  --toolbar-btn-bg: #21262d;
+  --toolbar-btn-hover: #30363d;
+  --toolbar-btn-active-bg: #58a6ff;
+  --toolbar-btn-active-text: #fff;
+  --tip-border: #f87171;
+  --tip-bg: rgba(248, 113, 113, 0.08);
+  --tip-icon-bg: #f87171;
+  --tip-text: #c9d1d9;
+  --warn-bg: rgba(88, 166, 255, 0.08);
+  --warn-border: #58a6ff;
+  --warn-text: #c9d1d9;
+}
+
+html[data-theme="sepia"] {
+  --bg-color: #f9f5ec;
+  --bg-color-secondary: #f1ece1;
+  --text-color: #4a4540;
+  --text-color-secondary: #7d766c;
+  --heading-color: #33302b;
+  --sidebar-bg: #f1ece1;
+  --sidebar-text: #7d766c;
+  --sidebar-heading: #33302b;
+  --sidebar-active: #6b8e5a;
+  --border-color: #ddd6c8;
+  --inline-code-bg: #ece6d8;
+  --inline-code-color: #956d3f;
+  --code-block-bg: #2c2822;
+  --code-block-text: #e8e4dc;
+  --link-color: #6b8e5a;
+  --link-hover: #567a48;
+  --blockquote-bg: transparent;
+  --blockquote-border: #6b8e5a;
+  --blockquote-text: #7d766c;
+  --table-head-bg: #f1ece1;
+  --table-stripe-bg: #f5f0e6;
+  --table-border: #ddd6c8;
+  --search-bg: #f9f5ec;
+  --search-border: #ddd6c8;
+  --search-text: #4a4540;
+  --search-result-bg: #f1ece1;
+  --search-result-highlight: #6b8e5a;
+  --shadow: 0 2px 8px rgba(60, 55, 40, 0.1);
+  --toolbar-bg: rgba(241, 236, 225, 0.94);
+  --toolbar-border: rgba(60, 55, 40, 0.12);
+  --toolbar-text: #7d766c;
+  --toolbar-btn-bg: #ece6d8;
+  --toolbar-btn-hover: #ddd6c8;
+  --toolbar-btn-active-bg: #6b8e5a;
+  --toolbar-btn-active-text: #fff;
+  --tip-border: #c4705a;
+  --tip-bg: rgba(196, 112, 90, 0.07);
+  --tip-icon-bg: #c4705a;
+  --tip-text: #4a4540;
+  --warn-bg: rgba(107, 142, 90, 0.08);
+  --warn-border: #6b8e5a;
+  --warn-text: #4a4540;
+}
+
+/* ======================================================
+   Theme Transitions
+   ====================================================== */
+
+body,
+.sidebar,
+.content,
+.markdown-section,
+.search,
+.sidebar-toggle {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* ======================================================
+   Body & Page Background
+   ====================================================== */
+
+body {
+  background-color: var(--bg-color) !important;
+  color: var(--text-color) !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei",
+    Roboto, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* ======================================================
+   Sidebar
+   ====================================================== */
+
+.sidebar {
+  width: var(--sidebar-width);
+  margin: 0 !important;
+  padding: 0.8rem 0.75rem 4rem;
+  box-sizing: border-box;
+  background-color: var(--sidebar-bg) !important;
+  border-right: 1px solid var(--border-color) !important;
+  color: var(--sidebar-text) !important;
+}
+
+.sidebar-toggle {
+  left: 12px !important;
+  bottom: 12px !important;
+  width: 42px !important;
+  height: 42px !important;
+  padding: 10px !important;
+  box-sizing: border-box;
+  border: 1px solid var(--toolbar-border) !important;
+  border-radius: 11px !important;
+  background-color: var(--toolbar-bg) !important;
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  opacity: 0.92;
+  z-index: 100;
+}
+
+.sidebar-toggle:hover {
+  opacity: 1;
+  transform: translateY(-1px);
+}
+
+.sidebar-toggle span {
+  width: 20px !important;
+  height: 2px !important;
+  margin-bottom: 4px !important;
+  background-color: var(--toolbar-text) !important;
+  border: 0 !important;
+  border-radius: 2px;
+}
+
+.sidebar-toggle span:last-child {
+  margin-bottom: 0 !important;
+}
+
+/* docsify dark mode: sidebar-toggle icon color */
+html[data-theme="dark"] .sidebar-toggle span,
+html[data-theme="dark"] .sidebar-toggle {
+  border-color: var(--border-color) !important;
+}
+
+.sidebar > h1 {
+  text-align: left;
+  padding-left: 0.3em;
+  margin: 0.3rem !important;
+}
+
+.sidebar > h1 a {
+  color: var(--sidebar-heading) !important;
+  font-weight: bolder;
+}
+
+.sidebar li > p {
+  margin: 0 0 0 0.3rem;
+}
+
+.sidebar ul {
+  margin: 0 0 0 0.6rem !important;
+}
+
+.sidebar ul li a {
+  color: var(--sidebar-text) !important;
+}
+
+.sidebar ul li a:hover {
+  color: var(--sidebar-active) !important;
+}
+
+.sidebar ul li.active > a {
+  color: var(--sidebar-active) !important;
+  border-right-color: var(--sidebar-active) !important;
+}
+
+.sidebar-nav > ul {
+  padding-left: 0.8em;
+}
+
+.sidebar .level-1 > ul > li > a {
+  font-size: 0.9rem !important;
+  font-weight: 800 !important;
+}
+
+.sidebar .level-1 > ul > li > a::before {
+  content: "•";
+  color: var(--sidebar-text);
+  font-size: 0.8rem !important;
+  margin-right: 0.3rem;
+}
+
+/* ======================================================
+   Content Area
+   ====================================================== */
+
+.content {
+  left: var(--sidebar-width);
+  right: 0;
+  bottom: auto;
+  padding-top: 0.2rem;
+  padding-bottom: 0.1rem;
+  background-color: var(--bg-color) !important;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+body.close .content {
+  left: 0;
+}
+
+.nav {
+  width: var(--toc-width, 280px) !important;
+  margin-top: 1rem;
+}
+
+/* ======================================================
+   Font Scale System
+   ====================================================== */
+
+.markdown-section {
+  font-size: calc(16.5px * var(--font-scale, 1)) !important;
+  line-height: 1.72;
+  margin: 0 auto !important;
+  padding: 1.6rem clamp(1.5rem, 4vw, 4rem) 4rem !important;
+  max-width: var(--content-max-width) !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  min-width: 0;
+  color: var(--text-color) !important;
+}
+
+.markdown-section h1 { font-size: 1.9em !important; }
+.markdown-section h2 { font-size: 1.55em !important; }
+.markdown-section h3 { font-size: 1.3em !important; }
+.markdown-section h4 { font-size: 1.15em !important; }
+.markdown-section h5 { font-size: 1.1em !important; }
+.markdown-section h6 { font-size: 1em !important; }
+
+.markdown-section pre > code {
+  font-size: 0.875em !important;
+  line-height: 1.65;
+}
+
+/* ======================================================
+   Headings & Anchors
+   ====================================================== */
+
+.markdown-section h1,
+.markdown-section h2,
+.markdown-section h3,
+.markdown-section h4 {
+  color: var(--heading-color) !important;
+}
+
+.anchor span {
+  color: var(--heading-color) !important;
+  font-weight: bolder;
+}
+
+.markdown-section h1 { margin: 1.2rem 0 0.6rem; }
+.markdown-section h2 { margin: 1rem 0 0.5rem; }
+.markdown-section h3 { margin: 0.8rem 0 0.4rem; }
+.markdown-section h4 { margin: 0.6rem 0 0.3rem; }
+
+.markdown-section p { margin: 0.55rem 0; }
+
+.markdown-section ol,
+.markdown-section ul {
+  margin: 0.5rem 0;
+}
+
+.markdown-section > ul > li > ul {
+  margin: 0.2rem 0;
+}
+
+.markdown-section pre {
+  margin: 0.7rem 0;
+}
+
+.markdown-section blockquote {
+  margin: 0.55rem 0;
+}
+
+/* ======================================================
+   Text & Paragraphs
+   ====================================================== */
+
+.markdown-section p {
+  color: var(--text-color);
+}
+
+.markdown-section strong {
+  color: var(--heading-color);
+}
+
+/* ======================================================
+   Links
+   ====================================================== */
+
+.markdown-section a {
+  color: var(--link-color) !important;
+}
+
+.markdown-section a:hover {
+  color: var(--link-hover) !important;
+  text-decoration: underline;
+}
+
+/* ======================================================
+   Code – Inline
+   ====================================================== */
+
+.markdown-section code {
+  background-color: var(--inline-code-bg);
+  color: var(--inline-code-color);
+  border-radius: 4px;
+  font-family: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+}
+
+/* ======================================================
+   Code – Blocks (always dark, no theme change)
+   ====================================================== */
+
+.markdown-section pre {
+  background-color: var(--code-block-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  position: relative;
+  overflow-x: auto;
+  padding: 0.9rem 1rem !important;
+  tab-size: 4;
+}
+
+.markdown-section pre > code {
+  background-color: transparent;
+  color: var(--code-block-text);
+  padding: 0.5rem 0;
+}
+
+.docsify-copy-code-button {
+  border-radius: 4px !important;
+  top: 10px !important;
+  right: 10px !important;
+  padding: 0.2rem 0.55rem !important;
+  font-size: 12px !important;
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #f3f3f3 !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+.docsify-copy-code-button:hover {
+  background: rgba(255, 255, 255, 0.22) !important;
+}
+
+/* ======================================================
+   Syntax Highlighting Tokens (code blocks, always dark)
+   ====================================================== */
+
+.token.punctuation { color: #ceddff; }
+
+.token.atrule, .token.builtin, .token.important,
+.token.keyword, .token.selector { color: #f292f4; }
+
+.token.attr-name, .token.deleted,
+.token.namespace, .token.tag { color: #ff8e91; }
+
+.token.boolean, .token.function, .token.number { color: #ffc27c; }
+
+.token.attr-value, .token.char, .token.regex,
+.token.string, .token.variable { color: #99ff99; }
+
+.token.entity, .token.operator, .token.url { color: #8ff4ff; }
+
+.token.class-name, .token.constant,
+.token.property, .token.symbol { color: #ecff87; }
+
+/* C/C++ specific */
+pre code.language-cpp .token.keyword,
+pre code.language-c .token.keyword,
+pre code[class*="language-cpp"] .token.keyword,
+pre code[class*="language-c"] .token.keyword {
+  color: #c792ea;
+  font-weight: 600;
+}
+
+pre code.language-cpp .token.operator,
+pre code.language-cpp .token.punctuation,
+pre code.language-c .token.operator,
+pre code.language-c .token.punctuation,
+pre code[class*="language-cpp"] .token.operator,
+pre code[class*="language-cpp"] .token.punctuation,
+pre code[class*="language-c"] .token.operator,
+pre code[class*="language-c"] .token.punctuation {
+  color: #cbd5e1;
+}
+
+pre code.language-cpp .token.class-name,
+pre code.language-cpp .token.function,
+pre code.language-c .token.class-name,
+pre code.language-c .token.function,
+pre code[class*="language-cpp"] .token.class-name,
+pre code[class*="language-cpp"] .token.function,
+pre code[class*="language-c"] .token.class-name,
+pre code[class*="language-c"] .token.function {
+  color: #82aaff;
+}
+
+pre code.language-cpp .token.string,
+pre code.language-cpp .token.char,
+pre code.language-c .token.string,
+pre code.language-c .token.char,
+pre code[class*="language-cpp"] .token.string,
+pre code[class*="language-cpp"] .token.char,
+pre code[class*="language-c"] .token.string,
+pre code[class*="language-c"] .token.char {
+  color: #c3e88d;
+}
+
+pre code.language-cpp .token.number,
+pre code.language-cpp .token.boolean,
+pre code.language-c .token.number,
+pre code.language-c .token.boolean,
+pre code[class*="language-cpp"] .token.number,
+pre code[class*="language-cpp"] .token.boolean,
+pre code[class*="language-c"] .token.number,
+pre code[class*="language-c"] .token.boolean {
+  color: #f78c6c;
+}
+
+pre code.language-cpp .token.comment,
+pre code.language-c .token.comment,
+pre code[class*="language-cpp"] .token.comment,
+pre code[class*="language-c"] .token.comment {
+  color: #7f8c98;
+  font-style: italic;
+}
+
+/* Rust / Go specific (mirror the generic dark palette, tuned) */
+pre code.language-rust .token.keyword,
+pre code[class*="language-rust"] .token.keyword,
+pre code.language-go .token.keyword,
+pre code[class*="language-go"] .token.keyword {
+  color: #c792ea;
+  font-weight: 600;
+}
+
+pre code.language-rust .token.function,
+pre code.language-rust .token.class-name,
+pre code[class*="language-rust"] .token.function,
+pre code[class*="language-rust"] .token.class-name,
+pre code.language-go .token.function,
+pre code.language-go .token.class-name,
+pre code[class*="language-go"] .token.function,
+pre code[class*="language-go"] .token.class-name {
+  color: #82aaff;
+}
+
+pre code.language-rust .token.string,
+pre code.language-rust .token.char,
+pre code[class*="language-rust"] .token.string,
+pre code[class*="language-rust"] .token.char,
+pre code.language-go .token.string,
+pre code[class*="language-go"] .token.string {
+  color: #c3e88d;
+}
+
+pre code.language-rust .token.macro,
+pre code[class*="language-rust"] .token.macro,
+pre code.language-rust .token.attribute,
+pre code[class*="language-rust"] .token.attribute {
+  color: #ffcb6b;
+}
+
+pre code.language-rust .token.lifetime-annotation,
+pre code[class*="language-rust"] .token.lifetime-annotation,
+pre code.language-rust .token.lifetime,
+pre code[class*="language-rust"] .token.lifetime {
+  color: #f78c6c;
+  font-style: italic;
+}
+
+pre code.language-rust .token.comment,
+pre code[class*="language-rust"] .token.comment,
+pre code.language-go .token.comment,
+pre code[class*="language-go"] .token.comment {
+  color: #7f8c98;
+  font-style: italic;
+}
+
+/* ======================================================
+   Blockquotes  ( > xxx )
+   ====================================================== */
+
+.markdown-section blockquote {
+  border-left: 4px solid var(--blockquote-border) !important;
+  background: none !important;
+  color: var(--blockquote-text) !important;
+  margin: 0.55rem 0 !important;
+  padding: 0.15rem 0 0.15rem 1rem !important;
+}
+
+.markdown-section blockquote p {
+  color: var(--blockquote-text) !important;
+  font-weight: 600;
+  margin: 0.25rem 0;
+}
+
+.markdown-section blockquote > :first-child { margin-top: 0; }
+.markdown-section blockquote > :last-child { margin-bottom: 0; }
+
+/* ======================================================
+   Tip  ( !> xxx )
+   ====================================================== */
+
+.markdown-section p.tip {
+  background-color: var(--tip-bg) !important;
+  border-left: 4px solid var(--tip-border) !important;
+  border-radius: 0 4px 4px 0;
+  color: var(--tip-text) !important;
+  margin: 0.55rem 0;
+  padding: 0.5rem 0.8rem 0.5rem 1.8rem;
+  position: relative;
+}
+
+.markdown-section p.tip::before {
+  background-color: var(--tip-icon-bg);
+  border-radius: 50%;
+  color: #fff;
+  content: "!";
+  font-size: 12px;
+  font-weight: 700;
+  width: 18px;
+  height: 18px;
+  line-height: 18px;
+  text-align: center;
+  position: absolute;
+  left: -9px;
+  top: 0.55rem;
+}
+
+.markdown-section p.tip code {
+  background-color: var(--inline-code-bg) !important;
+}
+
+/* ======================================================
+   Warn  ( ?> xxx )
+   ====================================================== */
+
+.markdown-section p.warn {
+  background-color: var(--warn-bg) !important;
+  border-left: 4px solid var(--warn-border) !important;
+  border-radius: 0 4px 4px 0;
+  color: var(--warn-text) !important;
+  margin: 0.55rem 0;
+  padding: 0.5rem 0.8rem;
+}
+
+/* ======================================================
+   Tables
+   ====================================================== */
+
+.markdown-section table {
+  border-collapse: collapse;
+}
+
+.markdown-section table th {
+  background-color: var(--table-head-bg) !important;
+  color: var(--heading-color) !important;
+}
+
+.markdown-section table td,
+.markdown-section table th {
+  border: 1px solid var(--table-border) !important;
+  color: var(--text-color);
+}
+
+.markdown-section table tr:nth-child(2n) {
+  background-color: var(--table-stripe-bg) !important;
+}
+
+/* ======================================================
+   Horizontal Rules
+   ====================================================== */
+
+.markdown-section hr {
+  border-color: var(--border-color) !important;
+  margin: 0.9rem 0 !important;
+}
+
+/* ======================================================
+   Search
+   ====================================================== */
+
+.search {
+  margin-bottom: 0 !important;
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.search input {
+  background-color: var(--search-bg) !important;
+  border: 1px solid var(--search-border) !important;
+  color: var(--search-text) !important;
+}
+
+.search input::placeholder {
+  color: var(--text-color-secondary) !important;
+}
+
+.search .results-panel {
+  background-color: var(--search-result-bg) !important;
+}
+
+.search .matching-post {
+  border-bottom: 1px solid var(--border-color) !important;
+}
+
+.search .matching-post .search-keyword {
+  color: var(--search-result-highlight) !important;
+}
+
+.search a:hover {
+  color: var(--link-color) !important;
+}
+
+/* ======================================================
+   Page TOC (nav)
+   ====================================================== */
+
+.nav .page-toc a {
+  color: var(--text-color-secondary) !important;
+}
+
+.nav .page-toc a:hover,
+.nav .page-toc a.active {
+  color: var(--link-color) !important;
+}
+
+/* ======================================================
+   Scrollbar (dark theme)
+   ====================================================== */
+
+html[data-theme="dark"] ::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+  background: #0d1117;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+  background: #30363d;
+  border-radius: 4px;
+}
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+  background: #484f58;
+}
+
+/* ======================================================
+   Responsive
+   ====================================================== */
+
+@media (max-width: 1200px) {
+  .nav {
+    display: none !important;
+  }
+}
+
+/* Tablets and landscape phones: keep the article full width and let the
+   sidebar float above it, so code examples are not squeezed into a narrow column. */
+@media (max-width: 960px) {
+  .sidebar {
+    width: min(82vw, 270px);
+    box-shadow: 8px 0 24px rgba(0, 0, 0, 0.12);
+  }
+
+  .content,
+  body.close .content {
+    left: 0 !important;
+  }
+
+  .markdown-section {
+    max-width: 100% !important;
+    padding: 1.25rem clamp(1rem, 4vw, 2rem) 4.5rem !important;
+    font-size: calc(16px * var(--font-scale, 1)) !important;
+  }
+
+  .markdown-section table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  .doc-toolbar {
+    right: 12px;
+    bottom: 12px;
+  }
+}
+
+/* Landscape phones are commonly used to read the code samples. */
+@media (max-width: 960px) and (orientation: landscape) {
+  .markdown-section {
+    line-height: 1.68;
+    padding-top: 1rem !important;
+  }
+
+  .markdown-section h1 { font-size: 1.7em !important; }
+  .markdown-section h2 { font-size: 1.42em !important; }
+  .markdown-section h3 { font-size: 1.22em !important; }
+
+  .markdown-section pre {
+    margin: 0.8rem 0;
+  }
+}
+
+@media (max-width: 600px) and (orientation: portrait) {
+  .markdown-section {
+    padding: 1rem 1rem 4.5rem !important;
+    font-size: calc(15.5px * var(--font-scale, 1)) !important;
+  }
+
+  .markdown-section h1 { font-size: 1.7em !important; }
+  .markdown-section h2 { font-size: 1.4em !important; }
+  .markdown-section h3 { font-size: 1.2em !important; }
+}
+
+@media (hover: none) {
+  .sidebar-toggle:hover,
+  .doc-toolbar-toggle:hover {
+    transform: none;
+  }
+}
+
+/* ======================================================
+   Toolbar
+   ====================================================== */
+
+.doc-toolbar {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 99;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 14px;
+  user-select: none;
+}
+
+.doc-toolbar-toggle {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--toolbar-border);
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: var(--toolbar-text);
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, background 0.2s ease;
+  margin-left: auto;
+}
+
+.doc-toolbar-toggle:hover {
+  transform: scale(1.1);
+}
+
+.doc-toolbar.expanded .doc-toolbar-toggle {
+  transform: rotate(60deg);
+}
+
+.doc-toolbar-panel {
+  position: absolute;
+  bottom: 52px;
+  right: 0;
+  background: var(--toolbar-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--toolbar-border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(8px) scale(0.96);
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+  min-width: 180px;
+}
+
+.doc-toolbar.expanded .doc-toolbar-panel {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+}
+
+.doc-toolbar-section {
+  margin-bottom: 10px;
+}
+
+.doc-toolbar-section:last-child {
+  margin-bottom: 0;
+}
+
+.doc-toolbar-label {
+  font-size: 11px;
+  color: var(--toolbar-text);
+  opacity: 0.7;
+  margin-bottom: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.doc-toolbar-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Theme buttons */
+.doc-theme-btn {
+  flex: 1;
+  padding: 6px 0;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: var(--toolbar-btn-bg);
+  color: var(--toolbar-text);
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.doc-theme-btn span.theme-label {
+  font-size: 11px;
+}
+
+.doc-theme-btn:hover {
+  background: var(--toolbar-btn-hover);
+}
+
+.doc-theme-btn.active {
+  background: var(--toolbar-btn-active-bg);
+  color: var(--toolbar-btn-active-text);
+  border-color: var(--toolbar-btn-active-bg);
+}
+
+/* Font size buttons */
+.doc-font-btn {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 8px;
+  background: var(--toolbar-btn-bg);
+  color: var(--toolbar-text);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s ease;
+}
+
+.doc-font-btn:hover {
+  background: var(--toolbar-btn-hover);
+}
+
+.doc-font-btn:active {
+  transform: scale(0.92);
+}
+
+.doc-font-display {
+  flex: 1;
+  text-align: center;
+  color: var(--toolbar-text);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}

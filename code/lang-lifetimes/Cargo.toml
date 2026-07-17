@@ -1,0 +1,10 @@
+[package]
+name = "lang-lifetimes"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/lang/lifetimes.md
+# 运行（在 code/ 下）：cargo run -p lang-lifetimes
+
+[dependencies]
+labkit = { workspace = true }

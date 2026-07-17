@@ -1,0 +1,12 @@
+[package]
+name = "http-serde-json"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/http/serde-json.md
+# 运行（在 code/ 下）：cargo run -p http-serde-json
+
+[dependencies]
+labkit = { workspace = true }
+serde = { workspace = true }
+serde_json = { workspace = true }

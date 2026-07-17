@@ -1,0 +1,8 @@
+[package]
+name = "start-toolchain"
+version = "0.1.0"
+edition = "2021"
+
+# 这个入门示例故意不加任何依赖：它只演示「装好工具链 → 写第一个程序 → cargo run 跑起来」。
+# 等你读到「怎么加一个依赖」那节，再回头看 async-basics 是如何引入 tokio / labkit 的。
+[dependencies]

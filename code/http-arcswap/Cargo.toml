@@ -1,0 +1,19 @@
+[package]
+name = "http-arcswap"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+name = "http_arcswap"
+path = "src/lib.rs"
+
+[[bin]]
+name = "http-arcswap"
+path = "src/main.rs"
+
+[dependencies]
+tokio = { workspace = true }
+axum = { workspace = true }
+serde = { workspace = true }
+arc-swap = { workspace = true }
+labkit = { workspace = true }
