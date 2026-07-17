@@ -1,0 +1,25 @@
+[package]
+name = "network-quic-http3"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/quic-http3.md
+# 默认运行（教学程序：UDP 独立消息 vs TCP 粘包对比 + QUIC/HTTP3 直觉讲解）：
+#   cargo run -p network-quic-http3
+#
+# 额外体验一次真正的 QUIC 最小 echo（依赖 quinn，编译比默认重不少，
+# 默认不开，Windows 上工具链够用的话可以打开试试）：
+#   cargo run -p network-quic-http3 --features quic-demo
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }
+# 下面三个只在 quic-demo feature 打开时才参与编译，默认 cargo check/run
+# 完全不碰它们，保证本课"默认可编译可运行"这条底线。
+quinn = { workspace = true, optional = true }
+rustls = { workspace = true, optional = true }
+rcgen = { workspace = true, optional = true }
+
+[features]
+quic-demo = ["quinn", "rustls", "rcgen"]

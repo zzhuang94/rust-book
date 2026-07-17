@@ -39,7 +39,7 @@ async fn main() -> redis::RedisResult<()> {
     let _: () = connection.set(settings_key, "dark").await?;
 
     let values: Vec<Option<String>> = redis::cmd("MGET")
-        .arg([profile_key, settings_key])
+        .arg(&[profile_key, settings_key])
         .query_async(&mut connection)
         .await?;
     logln!("同槽批量读取：{values:?}");

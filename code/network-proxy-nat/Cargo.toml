@@ -1,0 +1,12 @@
+[package]
+name = "network-proxy-nat"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/proxy-nat.md
+# 运行（在 code/ 下）：cargo run -p network-proxy-nat
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

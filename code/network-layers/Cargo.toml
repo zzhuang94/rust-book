@@ -1,0 +1,11 @@
+[package]
+name = "network-layers"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/layers.md（如后续补充）
+# 运行（在 code/ 下）：cargo run -p network-layers
+
+[dependencies]
+anyhow = { workspace = true }
+labkit = { workspace = true }

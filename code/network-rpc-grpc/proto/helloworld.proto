@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+// gRPC 官方 helloworld 教程同款最小定义，无任何敏感信息。
+package helloworld;
+
+service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply);
+}
+
+message HelloRequest {
+  string name = 1;
+}
+
+message HelloReply {
+  string message = 1;
+}

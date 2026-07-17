@@ -1,0 +1,18 @@
+[package]
+name = "network-rpc-grpc"
+version = "0.1.0"
+edition = "2021"
+
+# 运行（在 code/ 下）：cargo run -p network-rpc-grpc
+# proto 定义：proto/helloworld.proto；build.rs 里用 tonic-prost-build 在编译期生成代码。
+
+[dependencies]
+tokio = { workspace = true }
+tonic = { workspace = true }
+tonic-prost = { workspace = true }
+prost = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }
+
+[build-dependencies]
+tonic-prost-build = { workspace = true }

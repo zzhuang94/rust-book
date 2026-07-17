@@ -19,7 +19,18 @@ members = [
     "lang-error-handling",
     "lang-modules",
     "concurrency-threads",
+    "network-layers",
+    "network-addressing",
+    "network-socket",
     "network-udp-sockets",
+    "network-tcp",
+    "network-http-protocol",
+    "network-tls",
+    "network-timeouts-retries",
+    "network-debug-tools",
+    "network-load-balancing",
+    "network-proxy-nat",
+    "network-quic-http3",
     "async-basics",
     "async-tokio",
     "async-shared-state",
@@ -38,6 +49,9 @@ members = [
     "engineering-network-testing",
     "engineering-tracing",
     "http-sqlx",
+    "network-websocket",
+    "network-mqtt",
+    "network-rpc-grpc",
 ]
 
 # 统一在这里管理版本，各成员用 `xxx = { workspace = true }` 引用。
@@ -76,3 +90,33 @@ anyhow = "1"
 socket2 = { version = "0.5", features = ["all"] }
 # HTTP 客户端；本教程示例只访问本地 HTTP，所以不额外开启 TLS。
 reqwest = { version = "0.12", default-features = false, features = ["json"] }
+# ---- TLS 演示（network-tls）----
+# rcgen：现场生成自签名证书；rustls/tokio-rustls：纯 Rust 的 TLS 协议栈。
+# 都关掉默认的 aws-lc-rs 加密后端换成 ring：aws-lc-rs 需要 cmake/nasm 等
+# 原生构建工具，教学环境里容易编译失败；ring 只需要一个 C 编译器。
+rcgen = "0.13"
+rustls = { version = "0.23", default-features = false, features = ["ring", "std", "tls12"] }
+tokio-rustls = { version = "0.26", default-features = false, features = ["ring", "logging", "tls12"] }
+# ---- network-websocket：WebSocket echo（tokio-tungstenite）----
+# 默认特性只有 connect+handshake，不带任何 TLS 后端；本课只连 ws://127.0.0.1，够用。
+tokio-tungstenite = "0.30"
+# sink 特性给 WebSocketStream 提供 SinkExt::send；std 特性给 StreamExt::next。
+futures-util = { version = "0.3", default-features = false, features = ["std", "sink"] }
+# ---- network-mqtt：最小 MQTT pub/sub（rumqttc）----
+# 关掉默认的 use-rustls：本课只连本机明文 1883，不需要 TLS 协议栈，
+# 顺带避免 rustls 默认加密后端 aws-lc-rs 在 Windows 上还要装 nasm/cmake 才能编译的问题。
+rumqttc = { version = "0.25", default-features = false }
+# ---- network-rpc-grpc：最小 gRPC helloworld（tonic + prost）----
+# tonic 默认特性 = router+transport+codegen，本身就不含任何 tls-* 特性，天然明文 h2，不用额外关闭什么。
+tonic = "0.14"
+prost = "0.14"
+# tonic 0.13 起把“读 .proto 生成代码”这部分拆到了 tonic-prost-build（build.rs 里用它），
+# 它内部会拉 prost-build；tonic-build 只剩下不依赖 prost 的通用 codegen 基础设施。
+tonic-prost-build = "0.14"
+# 生成的代码里用到 tonic_prost::ProstCodec 做请求/响应编解码，这是运行期依赖
+# （对应 build-dep 那个 tonic-prost-build，一个管编译期生成代码，一个管运行期编解码）。
+tonic-prost = "0.14"
+# ---- network-quic-http3：可选的真实 QUIC echo（quic-demo feature）----
+# quinn 默认特性就是 rustls-ring（ring 加密后端），不像 rustls 单独引入时
+# 默认走 aws-lc-rs，所以这里不需要像 network-tls 那样手动关默认特性换后端。
+quinn = "0.11"

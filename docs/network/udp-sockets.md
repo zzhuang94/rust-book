@@ -10,6 +10,13 @@
 我们先弄清 UDP，再把 Rust 标准库、Tokio 和操作系统 socket 接起来。
 如果“非阻塞、系统调用、端口”还是生词，先读 [《操作系统基础》](../concurrency/os-basics.md)。
 
+建议先读 [《分层是为了解耦》](layers.md) →
+[《地址决定连去哪》](addressing.md) →
+[《socket 就是文件描述符》](socket.md) →
+[《TCP 是可靠字节流》](tcp.md)，再读本课：先弄清分层、寻址、
+socket 和 TCP，再对比 UDP 会更顺。学完本课后可继续
+[《HTTP 是文本协议》](http-protocol.md) 等应用层章节。
+
 ----
 
 # UDP 没有连接

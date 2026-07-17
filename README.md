@@ -30,7 +30,7 @@
 | **开始** | 装好环境、建立 Go→Rust 心智地图 | [《环境与工具链》](docs/start/toolchain.md)、 [《Go → Rust 语言对照》](docs/start/go-vs-rust.md)、 [《Rust 语法底座》](docs/start/syntax-primer.md) |
 | **语言地基** | 从基础类型到所有权、集合、智能指针、错误处理 | [《基础类型》](docs/lang/basics.md) → [《流程控制》](docs/lang/control-flow.md) → [《所有权与借用》](docs/lang/ownership.md) → [《函数与闭包》](docs/lang/functions-closures.md) → [《生命周期》](docs/lang/lifetimes.md) → …（完整列表见侧栏） |
 | **并发基础** | 补齐 OS 词汇 + 线程模型，给异步一个参照系 | [《操作系统基础》](docs/concurrency/os-basics.md)、 [《Rust 多线程与并发》](docs/concurrency/threads.md)、 [《Go 并发实现（GMP）》](docs/concurrency/go-gmp.md) |
-| **网络编程** | 看懂 UDP、IPv4/IPv6 双栈和底层 socket 选项 | [《UDP 与双栈 socket》](docs/network/udp-sockets.md) |
+| **网络编程** | 从分层、Socket、TCP/UDP 到 HTTP/TLS/长连接/RPC，再到排障与进阶 | [《网络分层与模型》](docs/network/layers.md) → [《Socket 详解》](docs/network/socket.md) → [《TCP 保姆级》](docs/network/tcp.md) → [《HTTP 协议入门》](docs/network/http-protocol.md) → …（完整列表见侧栏） |
 | **异步主线** | async/await、Tokio、共享状态、并发工具箱 | [《async 基础》](docs/async/basics.md)、 [《Tokio 运行时》](docs/async/tokio.md)、 [《共享状态：Arc / RwLock》](docs/async/shared-state.md)、 [《超时、限流与任务组》](docs/async/task-control.md)、 [《通知与热更新》](docs/async/notify-watch.md)、 [《生产任务生命周期》](docs/async/service-lifecycle.md) |
 | **HTTP 服务** | 从裸 TCP 手写 HTTP 到 axum，再到请求上游、数据库和缓存 | [《从零手写 HTTP》](docs/http/http-from-scratch.md)、 [《axum 入门》](docs/http/axum.md)、 [《JSON 序列化与反序列化》](docs/http/serde-json.md)、 [《读写接口与错误处理》](docs/http/rest.md)、 [《ArcSwap 无锁读》](docs/http/arcswap.md)、 [《中间件与优雅退出》](docs/http/middleware-shutdown.md)、 [《reqwest 与上游容错》](docs/http/reqwest-resilience.md)、 [《接入 Redis》](docs/http/redis.md)、 [《Redis Cluster》](docs/http/redis-cluster.md)、 [《sqlx 数据库》](docs/http/sqlx.md) |
 | **工程实践** | 把语言能力接到真实项目：规范、解耦、测试、日志、依赖、部署 | [《代码规范与最佳实践》](docs/engineering/code-quality.md)、 [《测试》](docs/engineering/testing.md)、 [《网络集成测试》](docs/engineering/network-testing.md)、 [《tracing 结构化日志》](docs/engineering/tracing.md)、 [《Cargo 生态与依赖管理》](docs/engineering/cargo-ecosystem.md)、 [《构建与部署》](docs/engineering/build-deploy.md) |
@@ -45,6 +45,8 @@
 
 - **想尽快跑起服务**：开始 → 语言地基（重点啃 [《所有权与借用》](docs/lang/ownership.md) +  
   [《生命周期》](docs/lang/lifetimes.md)）→ 并发基础 → 网络编程 → 异步主线 → HTTP 服务，工程实践按需补。
+- **网络是黑盒、只会写业务接口**：并发基础之后，按侧栏「网络编程」从上到下读；  
+  至少读完分层、寻址、Socket、TCP、HTTP 协议、超时重试，再进 HTTP 服务组。
 - **想稳扎稳打**：按侧边栏从上到下通读；所有权两章是全书承重墙，值得花最多时间。
 - **已在改真实 Rust 项目**：先读一章 → 去对应 `code/<目录-文件名>/` 找示例 → 再回来对照。
 
@@ -74,7 +76,22 @@ cargo run -p lang-basics
 cargo run -p lang-ownership
 cargo run -p lang-functions-closures
 cargo run -p concurrency-threads
+# —— 网络编程（一章一 crate）——
+cargo run -p network-layers            # 分层与地址直觉
+cargo run -p network-addressing        # IP / 端口 / DNS
+cargo run -p network-socket            # bind / listen / accept / connect
+cargo run -p network-tcp               # 粘包与按行划界
 cargo run -p network-udp-sockets       # UDP + IPv4/IPv6 双栈 socket
+cargo run -p network-http-protocol     # 裸看 HTTP 原文
+cargo run -p network-tls               # 本地自签 TLS echo
+cargo run -p network-websocket         # WebSocket echo
+cargo run -p network-mqtt              # MQTT（需本机 :1883 broker，否则友好退出）
+cargo run -p network-rpc-grpc          # gRPC helloworld（本机 :50051）
+cargo run -p network-timeouts-retries  # 超时与重试
+cargo run -p network-debug-tools       # 本地端口供 ss/netstat 观察
+cargo run -p network-load-balancing    # 简易轮询转发
+cargo run -p network-proxy-nat         # 极简反向代理
+cargo run -p network-quic-http3        # UDP 边界 vs TCP；可选 --features quic-demo
 # —— 异步 / HTTP（一章一 crate，同样使用目录-文件名）——
 cargo run -p async-basics     # async 基础
 cargo run -p async-tokio    # Tokio 运行时

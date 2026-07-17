@@ -1,0 +1,23 @@
+[package]
+name = "network-tls"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/tls.md
+# 运行（在 code/ 下）：cargo run -p network-tls
+#
+# 完整 TLS 演示额外引入了三个依赖，并在 workspace.dependencies 里统一管理：
+#   rcgen        —— 现场生成一张自签名证书（省去手动 openssl 生成证书的步骤）
+#   rustls       —— 纯 Rust 实现的 TLS 协议栈
+#   tokio-rustls —— 把 rustls 接到 tokio 的 AsyncRead/AsyncWrite 上
+# 三者都关掉了默认的 aws-lc-rs 加密后端，换成 ring：aws-lc-rs 需要 cmake/nasm
+# 等原生构建工具，教学环境里很容易编译失败；ring 则只需要一个 C 编译器，
+# 跟这个 workspace 已经在用的 socket2、redis 等原生依赖没有额外门槛。
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }
+rcgen = { workspace = true }
+rustls = { workspace = true }
+tokio-rustls = { workspace = true }

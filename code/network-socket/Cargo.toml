@@ -1,0 +1,12 @@
+[package]
+name = "network-socket"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/socket.md（如后续补充）
+# 运行（在 code/ 下）：cargo run -p network-socket
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

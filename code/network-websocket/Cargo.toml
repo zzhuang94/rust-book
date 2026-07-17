@@ -1,0 +1,13 @@
+[package]
+name = "network-websocket"
+version = "0.1.0"
+edition = "2021"
+
+# 运行（在 code/ 下）：cargo run -p network-websocket
+
+[dependencies]
+tokio = { workspace = true }
+tokio-tungstenite = { workspace = true }
+futures-util = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

@@ -1,0 +1,12 @@
+[package]
+name = "network-load-balancing"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/network/load-balancing.md
+# 运行（在 code/ 下）：cargo run -p network-load-balancing
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

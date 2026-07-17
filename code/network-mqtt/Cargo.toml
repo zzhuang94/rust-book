@@ -1,0 +1,13 @@
+[package]
+name = "network-mqtt"
+version = "0.1.0"
+edition = "2021"
+
+# 运行（在 code/ 下）：cargo run -p network-mqtt
+# 需要先起一个本地 Mosquitto broker，见 src/main.rs 头部注释。
+
+[dependencies]
+tokio = { workspace = true }
+rumqttc = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }
