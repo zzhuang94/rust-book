@@ -170,6 +170,7 @@ fn demo_default_and_skip() {
         note: None,
         cache_hit: true, // skip：不会出现在 JSON 里
     };
+    logln!("  cache_hit = {}", out.cache_hit);
     logln!("  skip_serializing_if None → {}", serde_json::to_string(&out).unwrap());
 }
 
