@@ -1,13 +1,12 @@
 # reqwest 与上游容错
 
-> 代码：`code/http-reqwest-resilience/src/main.rs`　运行：  
-> `cargo run -p http-reqwest-resilience`
+> 代码：`code/http-reqwest-resilience/src/main.rs`　运行：`cargo run -p http-reqwest-resilience`
 
 HTTP 服务不只会接收请求，也经常要请求配置中心、节点列表或其他内部服务。
 “能发 GET”只是第一步；生产代码还要控制超时、识别状态码、解析 JSON、补充错误现场，
 并决定上游暂时不可用时自己的服务是否继续运行。
 
-本课示例会在本机临时启动一个 Axum 上游，再用 `reqwest` 请求它，不依赖互联网和外部服务。
+本课示例会在本机临时启动一个 Axum 上游，再用 `reqwest` 请求它，不依赖互联网和外部服务。  
 错误链的基础见 [《通用错误处理》](../lang/error-handling.md)，快照原子替换见
 [《ArcSwap 无锁读》](arcswap.md)。
 
