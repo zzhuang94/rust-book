@@ -74,11 +74,14 @@
     var toggle = el.querySelector('.doc-toolbar-toggle');
     toggle.addEventListener('click', function () {
       el.classList.toggle('expanded');
+      // 展开设置面板时保持可见；收起后再走自动隐藏计时
+      if (window.__docFabReveal) window.__docFabReveal();
     });
 
     document.addEventListener('click', function (e) {
       if (!el.contains(e.target)) {
         el.classList.remove('expanded');
+        if (window.__docFabReveal) window.__docFabReveal();
       }
     });
 
@@ -108,9 +111,106 @@
     });
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', buildToolbar);
-  } else {
+  /**
+   * 手机端：两个悬浮钮默认隐藏；手指滑动/滚动时显示，静止约 1 秒后再藏起。
+   * 桌面端不受影响。设置面板展开期间不自动隐藏。
+   */
+  function setupMobileFabAutoHide() {
+    var mq = window.matchMedia('(max-width: 960px)');
+    var HIDE_MS = 1000;
+    var hideTimer = null;
+
+    function isMobile() {
+      return mq.matches;
+    }
+
+    function toolbarExpanded() {
+      var tb = document.querySelector('.doc-toolbar');
+      return !!(tb && tb.classList.contains('expanded'));
+    }
+
+    function clearHideTimer() {
+      if (hideTimer !== null) {
+        clearTimeout(hideTimer);
+        hideTimer = null;
+      }
+    }
+
+    function hideFabs() {
+      if (!isMobile()) return;
+      if (toolbarExpanded()) return;
+      document.documentElement.classList.add('fab-auto-hidden');
+    }
+
+    function revealFabs() {
+      if (!isMobile()) {
+        document.documentElement.classList.remove('fab-auto-hidden');
+        clearHideTimer();
+        return;
+      }
+      document.documentElement.classList.remove('fab-auto-hidden');
+      clearHideTimer();
+      if (toolbarExpanded()) return;
+      hideTimer = setTimeout(hideFabs, HIDE_MS);
+    }
+
+    // 供设置按钮点击后复用
+    window.__docFabReveal = revealFabs;
+
+    function onScrollOrSwipe() {
+      if (!isMobile()) return;
+      revealFabs();
+    }
+
+    // capture：docsify 有时在 .content 内滚动
+    window.addEventListener('scroll', onScrollOrSwipe, { passive: true, capture: true });
+    document.addEventListener('touchmove', onScrollOrSwipe, { passive: true, capture: true });
+    document.addEventListener('wheel', onScrollOrSwipe, { passive: true, capture: true });
+
+    // 点到悬浮钮本身也刷新计时，避免刚摸到就被藏
+    document.addEventListener(
+      'pointerdown',
+      function (e) {
+        if (!isMobile()) return;
+        var t = e.target;
+        if (
+          t &&
+          t.closest &&
+          (t.closest('.sidebar-toggle') || t.closest('.doc-toolbar'))
+        ) {
+          revealFabs();
+        }
+      },
+      { passive: true }
+    );
+
+    function syncMode() {
+      clearHideTimer();
+      if (isMobile()) {
+        // 进手机布局：先闪一下让用户知道钮在哪，再自动藏
+        revealFabs();
+      } else {
+        document.documentElement.classList.remove('fab-auto-hidden');
+      }
+    }
+
+    if (typeof mq.addEventListener === 'function') {
+      mq.addEventListener('change', syncMode);
+    } else if (typeof mq.addListener === 'function') {
+      mq.addListener(syncMode);
+    }
+
+    syncMode();
+  }
+
+  function boot() {
     buildToolbar();
+    setupMobileFabAutoHide();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
   }
 })();
