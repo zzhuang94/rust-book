@@ -3,11 +3,10 @@
 > 代码：`code/async-service-lifecycle/src/main.rs`　运行：  
 > `cargo run -p async-service-lifecycle`
 
-会写 `tokio::spawn`，只代表会启动后台任务；能知道任务何时失败、通知其他任务退出、
-等待收尾并在超时后兜底，才算真正管理了服务生命周期。
+会写 `tokio::spawn`，只代表会启动后台任务；能知道任务何时失败、通知其他任务退出、等待收尾并在超时后兜底，才算真正管理了服务生命周期。
 
-本课把一个常驻服务缩小成两个任务：`heartbeat` 定时报告存活，`updater` 模拟上游刷新。
-刷新任务一秒后故意失败，主任务发现故障后停止整个服务。运行时不需要按 Ctrl-C。
+本课把一个常驻服务缩小成两个任务：`heartbeat` 定时报告存活，`updater` 模拟上游刷新。  
+刷新任务一秒后故意失败，主任务发现故障后停止整个服务。运行时不需要按 Ctrl-C。  
 建议先读 [《超时、限流与任务组》](task-control.md)；HTTP 停机入口见
 [《中间件与优雅退出》](../http/middleware-shutdown.md)。
 
@@ -47,28 +46,65 @@ tasks.spawn(heartbeat(cancel.child_token()));
 tasks.spawn(updater(cancel.child_token()));
 ```
 
-`JoinSet` 是动态任务组。`join_next().await` 不按启动顺序等待，而是哪个任务先结束，
-就先拿到哪个结果。这正适合监管长期运行的不同组件。
+`JoinSet` 是动态任务组：随时 `spawn` 加任务，`join_next().await` 收「下一个结束的」。
+它不按启动顺序等待，而是**哪个任务先结束，就先拿到哪个结果**。
+这正适合监管长期运行、寿命各不相同的组件——你不知道是 listener 先挂，
+还是配置刷新先失败，反正谁先出事谁先报到。
 
-任务结果看起来有三层：
+上一课 [《超时、限流与任务组》](task-control.md) 已经对比过 `Vec<JoinHandle>`：
+只能按 spawn 顺序 `await`，且 Vec 被 drop 时任务不会被取消。
+`JoinSet` 解决两者：完成顺序收结果；`JoinSet` 被 drop（或 `abort_all()`）时会收割剩余任务。
+本课在此之上，把它当作**服务监管中枢**：主流程通过它看见「谁挂了、何时挂了」。
+
+## `join_next` 返回什么
+
+`heartbeat` / `updater` 的签名都是 `async fn ... -> anyhow::Result<()>`，
+因此 `join_next().await` 的类型可以看成：
+
+```text
+Option< Result< Result<(), anyhow::Error>, JoinError > >
+         └─内层：业务──┘  └─外层：任务容器─┘
+└─有没有任务可收─┘
+```
+
+对应到日志里的几种形态：
 
 ```rust
-Some(Ok(Ok(())))
-Some(Ok(Err(e)))
-Some(Err(e))
+Some(Ok(Ok(())))   // 任务正常跑完，业务也成功
+Some(Ok(Err(e)))   // 任务正常跑完，但业务返回了 Err（如 updater 的 bail!）
+Some(Err(e))       // 任务容器出问题：panic，或被 abort / 取消
+None               // JoinSet 已经空了，没有任务可收
 ```
 
 从外向内拆：
 
-- `Option`：任务组可能已经空了；
-- 外层 `Result`：Tokio 任务本身是否正常完成；panic 或被 abort 会落到 `Err`；
-- 内层 `Result`：业务函数返回成功还是业务错误。
+| 层 | 类型 | 含义 |
+| --- | --- | --- |
+| 最外 | `Option` | `Some` = 收到一个已结束任务；`None` = 组里已经没任务了 |
+| 外层 `Result` | `Result<T, JoinError>` | Tokio **执行层**：任务有没有正常走完自己的 Future |
+| 内层 `Result` | `Result<(), E>` | **业务层**：函数返回的成功 / 失败（本例是 `anyhow::Result`） |
 
 所以不能只写一个 `.unwrap()` 把所有失败揉成 panic。生产日志要区分：
-“任务没有了”“业务失败”“任务 panic/被取消”，处理策略也可能不同。
+「任务没有了」「业务失败」「任务 panic/被取消」，处理策略也可能不同——
+例如业务失败可以触发整机退出，指标任务 panic 也许只重启该任务。
 
-> 🔩 底层视角：`JoinHandle` 的错误不是业务函数的错误。前者描述任务执行容器，
-> 后者描述任务里面做的事情。两层 `Result` 正是在保存这两个事实。
+> 🔩 底层视角：`JoinError` 不是业务函数的错误。前者描述任务执行容器
+> （panic、被 abort），后者描述任务里面做的事情（上游挂了、配置刷失败）。
+> 两层 `Result` 正是在保存这两个独立事实。
+
+## 本课里 `join_next` 用了两次
+
+同一 API，出现在停机流程的两个阶段，职责不同：
+
+1. **`select!` 里的一次**——当停机扳机。  
+   只等到**第一个**关键任务结束就够了（或等到 Ctrl-C）。  
+   目的是发现「该停了」，然后走到 `cancel.cancel()`。
+2. **后面 `drain` 循环里的多次**——当收尾确认。  
+   已经广播取消后，`while let Some(...) = tasks.join_next().await`  
+   把还在跑的任务一个个等完，确认 `JoinSet` 清空；外面再包超时，超时则 `abort_all()`。
+
+一句话：前一次回答「要不要停」，后一次回答「停干净了没有」。
+`select!` 与五步退出的细节见后面两小节。
 
 ----
 

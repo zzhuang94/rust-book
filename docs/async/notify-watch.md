@@ -3,8 +3,8 @@
 > 代码：`code/async-notify-watch/src/main.rs`　运行：`cargo run -p async-notify-watch`（场景 (1)–(4)：  
 > watch 热更新 / broadcast 扇出 / Notify 信号 / OnceCell 懒初始化）
 
-[《Tokio 运行时》](tokio.md) 学了 mpsc 和 oneshot。这一课补齐 tokio 通道/同步原语的另外四件，  
-它们覆盖的都是工程里的真实场景：**配置热更新、事件广播、纯信号、全局资源懒初始化**。
+[《Tokio 运行时》](tokio.md) 学了 mpsc 和 oneshot。这一课补齐 tokio 通道/同步原语的另外四件，它们覆盖的都是工程里的真实场景：  
+**配置热更新、事件广播、纯信号、全局资源懒初始化**。
 
 ----
 

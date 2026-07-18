@@ -25,6 +25,7 @@ fn main() {
 // ======================== 基础往返 ========================
 
 #[derive(Debug, Serialize, Deserialize, PartialEq)]
+#[serde(rename_all = "PascalCase")]
 struct User {
     id: u64,
     name: String,
@@ -78,7 +79,7 @@ fn demo_value_and_json_macro() {
         id: u64,
     }
     let only: OnlyId = serde_json::from_value(v).unwrap();
-    logln!("  只取 id → {only:?}");
+    logln!("  只取 id → {only:?}, id={}", only.id);
 }
 
 // ======================== 字段命名 ========================

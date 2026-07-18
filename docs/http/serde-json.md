@@ -4,12 +4,10 @@
 > 运行：在 `code/` 目录下执行 `cargo run -p http-serde-json`
 
 > 前置：[《axum 入门》](axum.md)（知道有 `Json<T>` 即可）。  
-> Go 里你用 `encoding/json` + struct tag；Rust 里标准答案是 **`serde` + `serde_json`**。  
-> 这一章把派生宏、往返、字段属性、`Option`/`null`、枚举标签讲透——  
-> [《读写接口与错误处理》](rest.md) 里的请求/响应体，全靠这套。
+> Go 里你用 `encoding/json` + struct tag；Rust 里标准答案是 **`serde` + `serde_json`**    
+> 这一章把派生宏、往返、字段属性、`Option`/`null`、枚举标签讲透——[《读写接口与错误处理》](rest.md) 里的请求/响应体，全靠这套。
 
-本课 **不启动 HTTP 端口**：先把序列化本身练熟。  
-axum 的 `Json<T>` 只是在 HTTP 边界帮你调用同一套 API。
+本课 **不启动 HTTP 端口**：先把序列化本身练熟。axum 的 `Json<T>` 只是在 HTTP 边界帮你调用同一套 API。
 
 ----
 
@@ -22,8 +20,7 @@ axum 的 `Json<T>` 只是在 HTTP 边界帮你调用同一套 API。
 | **serde** | 「可序列化」的 **trait + 派生宏**（格式无关） | 有点像「实现了某种编解码接口」 |
 | **serde_json** | JSON 这种 **具体格式** 的读写 | `encoding/json` |
 
-还有 `serde_yaml`、`toml` 等——同一套 `Serialize`/`Deserialize`，换格式 crate 即可。  
-服务端日常 95% 时间是 JSON。
+还有 `serde_yaml`、`toml` 等——同一套 `Serialize`/`Deserialize`，换格式 crate 即可。
 
 启用派生（本工作区已开）：
 
@@ -62,8 +59,7 @@ let u: User = serde_json::from_slice(&bytes)?;
 | `from_str` / `from_slice` | JSON → 结构体 | 类型写左边或 turbofish |
 | `to_writer` / `from_reader` | 流式 | 大文件、连接 |
 
-字段默认名 = Rust 字段名（通常 `snake_case`）。  
-要对齐前端的 `camelCase`，见下文 `rename_all`。
+> 字段默认名 = Rust 字段名（通常 `snake_case`），要对齐前端的 `camelCase`，见下文 `rename_all`。
 
 ----
 
@@ -83,8 +79,7 @@ println!("{}", v["id"]);                 // 索引，缺了得 Null
 v.get("tags").and_then(|t| t.get(0));  // 安全取值 → Option
 ```
 
-`json!` 是构造 `Value` 的宏，写起来像字面量。  
-也可以 `from_value` 把 `Value` 再转成强类型结构体（只取你关心的字段）。
+`json!` 是构造 `Value` 的宏，写起来像字面量，也可以 `from_value` 把 `Value` 再转成强类型结构体（只取你关心的字段）。
 
 服务端接口 **尽量用强类型**；`Value` 适合网关透传、不稳定的外部 JSON、快速脚本。
 
@@ -92,7 +87,7 @@ v.get("tags").and_then(|t| t.get(0));  // 安全取值 → Option
 
 # 改名：rename 与 rename_all
 
-> Go：`UserID int64 \`json:"userId"\``。  
+> Go：UserID int64 `json:"userId"``。  
 > Rust：属性写在字段或结构体上。
 
 ```rust
@@ -132,12 +127,12 @@ struct Patch {
 | `"title":null` | `None` |
 | 字段根本不出现 | `None` |
 
-注意：默认情况下 **「缺字段」和「显式 null」都进 `None`**，分不开。  
+> 注意：默认情况下 **「缺字段」和「显式 null」都进 `None`** ，分不开。
+
 多数 PATCH 够用；若必须区分「没传」vs「传了 null 表示清空」，  
 要上 `#[serde(default)]` + 包装类型或 `serde_with` 等进阶技巧（需要时再查）。
 
-序列化时：`None` **默认输出 `null`**（键还在）。  
-不想输出这个键：
+序列化时：`None` **默认输出 `null`** （键还在）。不想输出这个键：
 
 ```rust
 #[serde(skip_serializing_if = "Option::is_none")]
@@ -265,8 +260,7 @@ async fn create(Json(body): Json<NewItem>) -> Json<Resp> { ... }
 对照 Gin：`c.ShouldBindJSON(&body)` + `c.JSON(200, resp)`。  
 下一课 [《读写接口与错误处理》](rest.md) 把它接到路径参数、状态码、`Result` 错误上。
 
-工作区给 serde 开了 `rc` 特性时，还可以直接 `Serialize` 某些 `Arc<T>`——  
-见 [《ArcSwap 无锁读》](arcswap.md)。
+工作区给 serde 开了 `rc` 特性时，还可以直接 `Serialize` 某些 `Arc<T>`——见 [《ArcSwap 无锁读》](arcswap.md)。
 
 ----
 

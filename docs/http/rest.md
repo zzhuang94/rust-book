@@ -3,9 +3,8 @@
 > 代码：`code/http-rest/`　运行：`cargo run -p http-rest`（本课不跑后台更新任务：  
 > 数据只由 HTTP 写接口驱动，方便观察 POST 进去的数据不被覆盖）
 
-前置：[《axum 入门》](axum.md)；JSON 字段/Option/改名等见 [《JSON 序列化与反序列化》](serde-json.md)。  
-[《从零手写 HTTP》](http-from-scratch.md) 只有读接口。本课加三件事：
-
+前置：[《axum 入门》](axum.md)；JSON 字段/Option/改名等见 [《JSON 序列化与反序列化》](serde-json.md)；[《从零手写 HTTP》](http-from-scratch.md) 只有读接口。  
+本课加三件事：  
 1. **路径参数**（`GET /item/{idx}`）；
 2. **写接口**（`POST /item`，提取 JSON 请求体）；
 3. **错误处理**（`Result` 即响应，404/422 的正确姿势）。
@@ -25,8 +24,8 @@
 | `Query<T>` | 查询串 | 缺字段/类型错 → 400 | `c.Query` |
 | `Json<T>` | 请求体 | 解析失败 → 400/422 | `c.ShouldBindJSON` |
 
-哲学差异：Gin 什么都从 `*gin.Context` 手动取，忘了校验就悄悄拿到零值；axum 在 **函数签名** 里声明要什么，  
-框架负责搬运、校验、转换，出错以标准错误码暴露（或者干脆编译不过）。
+哲学差异：Gin 什么都从 `*gin.Context` 手动取，忘了校验就悄悄拿到零值；  
+axum 在 **函数签名** 里声明要什么，框架负责搬运、校验、转换，出错以标准错误码暴露（或者干脆编译不过）。
 
 ----
 
@@ -34,12 +33,11 @@
 
 > 提取器分两类，这决定了参数怎么排。
 
-**`FromRequestParts`** ——只读请求「元信息」：method、URI、headers、路径参数、  
-扩展； **不碰请求体** → 一个 handler 可以有 **任意多个**，顺序随意；`State`、`Path`、  
-`Query`、`HeaderMap` 属于此。
+- **`FromRequestParts`** ——只读请求「元信息」：method、URI、headers、路径参数、扩展；  
+> **不碰请求体** → 一个 handler 可以有 **任意多个**，顺序随意；`State`、`Path`、`Query`、`HeaderMap` 属于此。
 
-**`FromRequest`** ——要 **消费整个请求体**：body 是一次性的流，读了就没了；→ 一个 handler **最多一个**，  
-且 **必须是最后一个参数**；`Json`、`String`、`Bytes`、`Form` 属于此。
+- **`FromRequest`** ——要 **消费整个请求体**：body 是一次性的流，读了就没了；  
+> 一个 handler **最多一个**，且 **必须是最后一个参数**；`Json`、`String`、`Bytes`、`Form` 属于此。
 
 所以 `post_item` 的签名只能这么排：
 
@@ -78,11 +76,8 @@ pub async fn get_item(
 
 路由注册：`.route("/item/{idx}", get(handler::get_item))`。
 
-`Path<T>` 要点：`Path<usize>` 直接给你 `usize`； **解析失败自动回 400**（如 `/item/abc`），  
-一行代码不用写；多个路径参数用元组 `Path((uid, pid)): Path<(u64, u64)>`，或一个 `#[derive(Deserialize)]` 结构体。
-
-> ⚠️ **版本差异**：axum 0.8 起写 `/item/{idx}`（本工作区用 0.8）； **0.7 及以前是 `/item/:idx`**。  
-> 差异只在路由字符串，handler 的 Path 写法不变。
+`Path<T>` 要点：`Path<usize>` 直接给你 `usize`； **解析失败自动回 400**（如 `/item/abc`），一行代码不用写；  
+多个路径参数用元组 `Path((uid, pid)): Path<(u64, u64)>`，或一个 `#[derive(Deserialize)]` 结构体。
 
 对照 Gin：
 
@@ -101,8 +96,11 @@ Gin 的路径参数 **永远是字符串**，自己 strconv、自己处理失败
 
 > 本课重点：让 handler 返回 `Result`，成功给 200、失败给 404/422，全靠 IntoResponse。
 
-**最省事的写法：`Result<T, (StatusCode, String)>`** ——`Ok(Json(...))` → 200 + JSON；  
-`Err((StatusCode::NOT_FOUND, msg))` → 404 + 文本。能这样写的原理：axum 里 **凡实现了 `IntoResponse` 的类型都能当返回值/错误**，  
+**最省事的写法：`Result<T, (StatusCode, String)>`**  
+- `Ok(Json(...))` → 200 + JSON；  
+- `Err((StatusCode::NOT_FOUND, msg))` → 404 + 文本。 
+
+能这样写的原理：axum 里 **凡实现了 `IntoResponse` 的类型都能当返回值/错误**，  
 而 `Json<T>`、`(StatusCode, String)`、`Result<T, E>`（T、E 都 IntoResponse）都实现了。
 
 **更工程化：自定义 AppError（[《接入 Redis》](redis.md) 兑现）**。项目变大后，用统一错误类型配合 `?`：
@@ -155,7 +153,7 @@ pub async fn post_item(
 2. 客户端 JSON 缺字段/类型不符 → 提取器自动回 **422**，不进你的 handler（Gin 的 ShouldBindJSON 要自己处理 err）；
 3. 返回 `(StatusCode, Json<T>)` 元组：第一个元素定状态码（这里 201 Created），第二个是 body。
 
-写入本身走 [《共享状态：Arc / RwLock》](../async/shared-state.md) 的规矩——临界区 **不含 `.await`**：
+写入本身走 [《共享状态：Arc / RwLock》](../async/shared-state.md) 的规矩——临界区 **不含 `.await`** ：
 
 ```rust
 pub fn append_item(&self, value: i64) -> u64 {

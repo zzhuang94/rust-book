@@ -3,15 +3,13 @@
 > 代码：`code/http-middleware-shutdown/`　运行：`cargo run -p http-middleware-shutdown`
 
 补上两个「生产环境必备」的能力：**请求日志中间件**（顺便理解洋葱模型）、 **优雅退出**（Ctrl-C 后等在途请求做完再退）。  
-同时演示一个工程实践：**直接复用 [《从零手写 HTTP》](http-from-scratch.md) 的 lib crate**，  
-不重复造轮子。
+同时演示一个工程实践：**直接复用 [《从零手写 HTTP》](http-from-scratch.md) 的 lib crate**，不重复造轮子。
 
 ----
 
 # 复用别的 crate
 
-> lib + bin 布局的回报：本课直接拿 [《从零手写 HTTP》](http-from-scratch.md) 的 state/handler/updater 来用，  
-> 不重复写。
+> lib + bin 布局的回报：本课直接拿 [《从零手写 HTTP》](http-from-scratch.md) 的 state/handler/updater 来用，不重复写。
 
 本课 `Cargo.toml`：
 
@@ -29,9 +27,8 @@ use http_http_from_scratch::updater::run_updater;
 ```
 
 要点：这就是「lib + bin」布局的回报——核心逻辑在 lib 里，别的 crate（或集成测试）直接依赖；  
-`{ path = "..." }` 是 **路径依赖**（不从 crates.io 拉，用本地目录的 crate，  
-同工作区内共享依赖版本）。对照 Go：≈ 把它做成 package，这里 import 复用；连「导出规则」都对应：  
-Rust 的 `pub` ≈ Go 首字母大写。
+`{ path = "..." }` 是 **路径依赖**（不从 crates.io 拉，用本地目录的 crate，同工作区内共享依赖版本）。  
+对照 Go：≈ 把它做成 package，这里 import 复用；连「导出规则」都对应：Rust 的 `pub` ≈ Go 首字母大写。
 
 ----
 
@@ -100,16 +97,13 @@ r.Use(Logger())
 
 ## 层的顺序与 tower 生态
 
-多个 `.layer()` 的规则：**后加的在外层**；`.layer(A).layer(B)` → 请求先过 B、  
-再过 A、再到 handler；要精确控制顺序（先限流→再鉴权→再日志），用 `tower::ServiceBuilder` 组合，  
-顺序更直观。
+多个 `.layer()` 的规则：**后加的在外层**；`.layer(A).layer(B)` → 请求先过 B、再过 A、再到 handler；  
+要精确控制顺序（先限流→再鉴权→再日志），用 `tower::ServiceBuilder` 组合，顺序更直观。
 
-`.layer()` 接受任何 tower `Layer`（回忆 [《从零手写 HTTP》](http-from-scratch.md)：  
-axum 站在 tower 上），所以能直接用整个 **tower / tower-http 生态**：超时（TimeoutLayer）、  
-限流、压缩、CORS、请求体大小限制…全是现成的。
+`.layer()` 接受任何 tower `Layer`（回忆 [《从零手写 HTTP》](http-from-scratch.md)：axum 站在 tower 上），  
+所以能直接用整个 **tower / tower-http 生态**：超时（TimeoutLayer）、限流、压缩、CORS、请求体大小限制…全是现成的。
 
-> **生产建议**：真实项目常用 `tower_http::trace::TraceLayer` + `tracing` 做 **结构化日志**（带 span、  
-> 级别、字段、可接 OpenTelemetry），见 [《tracing 结构化日志》](../engineering/tracing.md)。  
+> **生产建议**：真实项目常用 `tower_http::trace::TraceLayer` + `tracing` 做 **结构化日志**（带 span、级别、字段、可接 OpenTelemetry），见 [《tracing 结构化日志》](../engineering/tracing.md)。  
 > 本课手写 from_fn 是为了看清中间件 **本质**；看懂后换 TraceLayer 只是一行 `.layer(...)`。
 
 ----
@@ -118,7 +112,10 @@ axum 站在 tower 上），所以能直接用整个 **tower / tower-http 生态*
 
 > 「优雅退出」= 收到停止信号后：不再接受新连接 → 把已在处理的请求 **做完** → 再退出进程。
 
-不做会怎样：正在传输的响应被硬掐断，客户端看到连接重置；请求写数据库写到一半，留下不一致；k8s 滚动更新/容器重启时， **每次发版抖一批 5xx**。
+不做会怎样：
+- 正在传输的响应被硬掐断，客户端看到连接重置；
+- 请求写数据库写到一半，留下不一致；
+- k8s 滚动更新/容器重启时， **每次发版抖一批 5xx**。
 
 怎么写：
 
@@ -135,8 +132,7 @@ async fn shutdown_signal() {
 ```
 
 原理：`with_graceful_shutdown(fut)`——fut 一完成 → 触发优雅关闭（停 accept → 等在途请求 → serve 返回）；  
-回忆 [《async 基础》](../async/basics.md)：Future 是惰性的——`shutdown_signal()` 传进去时没有执行，  
-是 serve 内部拿它和「处理请求」一起 select，谁先好谁生效。
+回忆 [《async 基础》](../async/basics.md)：Future 是惰性的——`shutdown_signal()` 传进去时没有执行，是 serve 内部拿它和「处理请求」一起 select，谁先好谁生效。
 
 **生产要点：也监听 SIGTERM。** 容器/k8s 停 Pod 发的是 **SIGTERM**（不是 SIGINT），生产通常两个都等：
 

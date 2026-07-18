@@ -21,7 +21,7 @@ async fn heartbeat(cancel: CancellationToken) -> anyhow::Result<()> {
 async fn updater(cancel: CancellationToken) -> anyhow::Result<()> {
     tokio::select! {
         _ = cancel.cancelled() => Ok(()),
-        _ = tokio::time::sleep(Duration::from_secs(1)) => {
+        _ = tokio::time::sleep(Duration::from_secs(10)) => {
             anyhow::bail!("上游配置连续刷新失败")
         }
     }

@@ -37,27 +37,23 @@ async fn main() {
 }
 ```
 
-- (1) axum 跑在 tokio 上，所以 main 要挂 `#[tokio::main]`（Gin 不需要——Go 运行时内置，  
-  [《Tokio 运行时》](../async/tokio.md) 讲过这笔账）；
-- (2) `Router::new()` 造一个空路由表 ≈ `gin.New()`（注意不是 `gin.Default()`——axum 默认不带任何中间件，  
-  日志等要自己 layer）；
-- (3) `.route(路径, 方法路由)` 注册一条路由；`get(handler)` 表示「这个路径的 GET 归这个 handler」。  
-  这里 handler 是个闭包 `|| async { "hello" }`，正经项目里写具名 async fn；
-- (4) 自己 bind 端口拿 listener——axum 把「监听」和「服务」拆开了（好处：测试时可以 bind 端口 0 随机端口）；
-- (5) `axum::serve(listener, app)` 开始服务 ≈ `r.Run(":8080")`。
+- axum 跑在 tokio 上，所以 main 要挂 `#[tokio::main]`（Gin 不需要——Go 运行时内置，[《Tokio 运行时》](../async/tokio.md) 讲过这笔账）；
+- `Router::new()` 造一个空路由表 ≈ `gin.New()`（不是 `gin.Default()`——axum 默认不带任何中间件，日志等要自己 layer）；
+- `.route(路径, 方法路由)` 注册一条路由；`get(handler)` 表示「这个路径的 GET 归这个 handler」。这里 handler 是个闭包 `|| async { "hello" }`，正经项目里写具名 async fn；
+- 自己 bind 端口拿 listener——axum 把「监听」和「服务」拆开了（好处：测试时可以 bind 端口 0 随机端口）；
+- `axum::serve(listener, app)` 开始服务 ≈ `r.Run(":8080")`。
 
 ----
 
 # Router 是不可变积木
 
-> Gin 的 `r` 是个可变对象，你对着它连续 `r.GET`、`r.POST` 往里塞。axum 的 Router 不一样——**每个方法都消费旧 Router、  
-> 返回一个新 Router**（所有权转移 + builder 模式）。
+> Gin 的 `r` 是个可变对象，你对着它连续 `r.GET`、`r.POST` 往里塞。  
+> axum 的 Router 不一样—— **每个方法都消费旧 Router、返回一个新 Router**（所有权转移 + builder 模式）。
 
 ```rust
 let app = Router::new()          // Router A
     .route("/", get(home))      // A 被吃掉，产出 Router B
-    .route("/users", get(list)) // B 被吃掉，产出 Router C
-    .with_state(state);          // C 被吃掉，产出最终 Router
+    .route("/users", get(list)); // B 被吃掉，产出 Router C（可直接 serve）
 ```
 
 所以 axum 路由注册总是 **一长串链式调用**；想分开写也行，但要接住返回值：
@@ -67,6 +63,8 @@ let mut app = Router::new();
 app = app.route("/", get(home));       // 注意 app = ——不接住就丢了
 app = app.route("/users", get(list));
 ```
+
+（handler 若要用共享状态，链式末尾再加 `.with_state(...)`，见下一小节。）
 
 ## route 与 HTTP 方法
 
@@ -93,8 +91,7 @@ Router::new()
 ```
 
 - 取值不靠 `c.Param("id")`，靠 handler 参数上的 `Path` 提取器；
-- ⚠️ 版本差异提醒：**axum 0.8 起用 `{id}`/`{*path}`（本课程即 0.8）；0.7 及以前是 `:id`/`*path`** ——网上老教程很多是旧语法，  
-  注意换算。
+- ⚠️ 版本差异提醒：**axum 0.8 起用 `{id}`/`{*path}`（本课程即 0.8）；0.7 及以前是 `:id`/`*path`**
 
 ## nest 路由分组
 
@@ -115,8 +112,8 @@ let app = Router::new()
     .nest("/api/v1", api);               // /api/v1/users、/api/v1/orders
 ```
 
-比 Gin 更进一步的地方：子 Router 是 **独立的值**，可以放在别的模块/别的文件里组装好再挂上来——大项目里每个业务域一个 `pub fn routes() -> Router<AppState>`，  
-main 里逐个 nest，结构非常清爽。
+比 Gin 更进一步的地方：子 Router 是 **独立的值**，可以放在别的模块/别的文件里组装好再挂上来  
+大项目里每个业务域一个 `pub fn routes() -> Router<AppState>`，main 里逐个 nest，结构非常清爽。
 
 ## merge 平级合并
 
@@ -144,20 +141,24 @@ let app = Router::new()
 
 ## with_state 绑定状态
 
+**不是每次都要。** handler 都不抽 `State<T>` 时，`Router::new().route(...)` 本身就是可 `serve` 的；
+只有挂上了需要 `State<AppState>` 的 handler，才必须在末尾 `.with_state(...)`。
+
 ```rust
 #[derive(Clone)]
 struct AppState { /* Arc 字段们 */ }
 
 let app: Router = Router::new()
-    .route("/data", get(get_data))   // handler 想要 State<AppState>
-    .with_state(state);              // 在这里喂给它
+    .route("/data", get(get_data))   // handler 参数里有 State<AppState>
+    .with_state(state);              // 因此这里必须喂一份
 ```
 
 类型层面发生的事（理解了它，很多报错就看得懂）：
 
-- `Router::new()` 起手是「还欠着状态」的路由（准确说是泛型 `Router<S>`）；
-- `.with_state(state)` 把欠的状态补上，变成 `Router<()>`—— **只有 `Router<()>` 能交给 `axum::serve`**；
-- 所以「忘了 with_state」不会等到运行时才炸，而是 serve 那行直接编译不过。Gin 里依赖注入是运行时约定，axum 把它做成了编译期检查。
+- `Router` 是泛型 `Router<S>`。`Router::new()` 起手是 `Router<()>`——**不欠状态，可以直接 serve**；
+- 一旦 `.route` 挂上需要 `State<AppState>` 的 handler，类型变成 `Router<AppState>`（还欠一份状态）；
+- `.with_state(state)` 把欠的补上，变回 `Router<()>` —— **只有 `Router<()>` 能交给 `axum::serve`**；
+- 所以「该喂却忘了 with_state」不会等到运行时才炸，而是 serve 那行直接编译不过。
 
 nest/merge 的子路由也要状态时：让子 Router 也声明 `Router<AppState>`，在 **最外层** 统一 `.with_state(...)` 一次即可。
 
@@ -187,8 +188,8 @@ axum 反过来， **签名声明需求，框架照单配送**。
 
 # 提取器全家桶
 
-> 铁律先放前面（[《读写接口与错误处理》](rest.md) 的规则）：**消费请求体的提取器（Json/Form/String/Bytes）一个 handler 最多一个、  
-> 必须放参数列表最后**；其余（Path/Query/State/HeaderMap…）随意多个、顺序随意。
+> 铁律先放前面（[《读写接口与错误处理》](rest.md) 的规则）：  
+> **消费请求体的提取器（Json/Form/String/Bytes）一个 handler 最多一个、必须放参数列表最后**；其余（Path/Query/State/HeaderMap…）随意多个、顺序随意。
 
 ## Path 路径参数
 
@@ -445,8 +446,8 @@ error[E0277]: the trait bound `fn(...) -> ... {my_handler}: Handler<_, _>` is no
 
 # 三句话带走
 
-1. **Router 是不可变积木**：route/nest/merge/fallback 层层链式组装，`with_state` 补上状态后才能 serve——依赖给没给全是编译期问题，  
-   不是运行时惊喜。
+1. **Router 是不可变积木**：route/nest/merge/fallback 层层链式组装；handler 要 `State` 时才用 `with_state` 补上——  
+   依赖给没给全是编译期问题，不是运行时惊喜。
 2. **提取器按需声明、照单配送**：Path/Query/Json/Form/State/HeaderMap 各管一段请求；  
    消费 body 的只能一个且放最后；解析失败框架自动回 400/422，handler 只写快乐路径。
 3. **返回值即响应**：文本/Json/元组带状态码/Redirect/Result 全部开箱即用；分支类型不一致用 `.into_response()` 或 Result 统一；  
