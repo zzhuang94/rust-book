@@ -43,6 +43,9 @@
   --toolbar-btn-hover: #e0e0e0;
   --toolbar-btn-active-bg: #42b983;
   --toolbar-btn-active-text: #fff;
+  /* 代码字体：Monaco（macOS）优先，其余为常见编程等宽字体回退 */
+  --code-font: Monaco, "Cascadia Code", "Cascadia Mono", "JetBrains Mono",
+    "Fira Code", Consolas, "Courier New", monospace;
   --tip-border: #f66;
   --tip-bg: rgba(255, 102, 102, 0.06);
   --tip-icon-bg: #f66;
@@ -399,7 +402,8 @@ body.close .content {
   background-color: var(--inline-code-bg);
   color: var(--inline-code-color);
   border-radius: 4px;
-  font-family: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+  font-family: var(--code-font);
+  font-variant-ligatures: none;
 }
 
 /* ======================================================
@@ -414,12 +418,17 @@ body.close .content {
   overflow-x: auto;
   padding: 0.9rem 1rem !important;
   tab-size: 4;
+  font-family: var(--code-font);
 }
 
 .markdown-section pre > code {
   background-color: transparent;
   color: var(--code-block-text);
   padding: 0.5rem 0;
+  font-family: var(--code-font) !important;
+  font-variant-ligatures: none;
+  font-size: 0.92em;
+  line-height: 1.55;
 }
 
 .docsify-copy-code-button {
@@ -778,9 +787,19 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
     overflow-x: auto;
   }
 
+  /* 悬浮钮贴左右底角，避免落在正文中间遮挡阅读 */
+  .sidebar-toggle {
+    left: max(4px, env(safe-area-inset-left, 0px)) !important;
+    right: auto !important;
+    bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
+    width: 40px !important;
+    height: 40px !important;
+  }
+
   .doc-toolbar {
-    right: 12px;
-    bottom: 12px;
+    left: auto !important;
+    right: max(4px, env(safe-area-inset-right, 0px)) !important;
+    bottom: max(8px, env(safe-area-inset-bottom, 0px)) !important;
   }
 }
 
@@ -802,13 +821,24 @@ html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
 
 @media (max-width: 600px) and (orientation: portrait) {
   .markdown-section {
-    padding: 1rem 1rem 4.5rem !important;
+    /* 左右略留白给底角悬浮钮；底边再垫高一点，末段不被挡住 */
+    padding: 1rem 0.85rem 5.25rem !important;
     font-size: calc(15.5px * var(--font-scale, 1)) !important;
   }
 
   .markdown-section h1 { font-size: 1.7em !important; }
   .markdown-section h2 { font-size: 1.4em !important; }
   .markdown-section h3 { font-size: 1.2em !important; }
+
+  .sidebar-toggle {
+    left: max(2px, env(safe-area-inset-left, 0px)) !important;
+    bottom: max(6px, env(safe-area-inset-bottom, 0px)) !important;
+  }
+
+  .doc-toolbar {
+    right: max(2px, env(safe-area-inset-right, 0px)) !important;
+    bottom: max(6px, env(safe-area-inset-bottom, 0px)) !important;
+  }
 }
 
 @media (hover: none) {
