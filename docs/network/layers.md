@@ -8,7 +8,7 @@
 **分层到底解决了什么问题，业务程序员真正碰到的是哪几层**。
 
 如果你还不确定“阻塞”“socket”“fd”这些词，先读
-[《操作系统基础》](../concurrency/os-basics.md)。本章之后依次是
+[《计算机组成入门》](../os/computer-basics.md)。本章之后依次是
 [《寻址》](addressing.md)、[《socket 编程模型》](socket.md)、
 [《TCP 该知道的现象》](tcp.md)、[《UDP 与双栈 socket》](udp-sockets.md)，
 建议按顺序读。

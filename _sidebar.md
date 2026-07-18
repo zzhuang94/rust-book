@@ -22,9 +22,26 @@
   - [通用错误处理](/docs/lang/error-handling.md)
   - [模块、crate 与可见性](/docs/lang/modules.md)
 
+- 操作系统
+
+  - [计算机组成入门](/docs/os/computer-basics.md)
+  - [CPU 与存储层次](/docs/os/cpu-memory.md)
+  - [磁盘存储与 IO](/docs/os/disk-io.md)
+  - [进程与线程](/docs/os/process-thread.md)
+  - [用户态与内核态](/docs/os/user-kernel.md)
+  - [调度与时间片](/docs/os/scheduling.md)
+  - [协程与状态机](/docs/os/coroutine-state.md)
+  - [虚拟内存与缺页](/docs/os/virtual-memory.md)
+  - [文件与文件描述符](/docs/os/file-fd.md)
+  - [阻塞与 IO 多路复用](/docs/os/blocking-io.md)
+  - [锁与可见性直觉](/docs/os/sync-primitives.md)
+  - [性能成本常识](/docs/os/perf-cost.md)
+  - [信号与进程生命周期](/docs/os/signals-lifecycle.md)
+  - [时间与时钟](/docs/os/time-clock.md)
+  - [容器与资源限制](/docs/os/cgroup-container.md)
+
 - 并发基础
 
-  - [操作系统基础](/docs/concurrency/os-basics.md)
   - [Rust 多线程与并发](/docs/concurrency/threads.md)
   - [Go 并发实现（GMP）](/docs/concurrency/go-gmp.md)
 

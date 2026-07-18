@@ -1,0 +1,13 @@
+[package]
+name = "os-signals-lifecycle"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/signals-lifecycle.md
+# 运行（在 code/ 下）：cargo run -p os-signals-lifecycle
+# Windows 友好：用 2 秒超时模拟"收到退出信号"，同时也支持真的按 Ctrl-C。
+
+[dependencies]
+tokio = { workspace = true }
+anyhow = { workspace = true }
+labkit = { workspace = true }

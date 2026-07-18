@@ -1,0 +1,11 @@
+[package]
+name = "os-computer-basics"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/computer-basics.md
+# 运行（在 code/ 下）：cargo run -p os-computer-basics
+# 全部标准库，不需要网络、不需要 tokio。
+
+[dependencies]
+labkit = { workspace = true }

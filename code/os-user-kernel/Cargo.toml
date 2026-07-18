@@ -1,0 +1,11 @@
+[package]
+name = "os-user-kernel"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/user-kernel.md
+# 运行（在 code/ 下）：cargo run -p os-user-kernel
+# 全部标准库，跨平台（不依赖 /proc，Windows 上也能跑）。
+
+[dependencies]
+labkit = { workspace = true }

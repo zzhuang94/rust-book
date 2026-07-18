@@ -4,9 +4,9 @@
 > 运行：在 `code/` 目录下执行 `cargo run -p concurrency-threads`  
 > （全部标准库、不需要 tokio；片段也可单独 `cargo new demo` 粘进 `main.rs` 跑）
 
-> 前置：[《操作系统基础》](os-basics.md)（线程/调度/阻塞）、 [《Rust 语法底座》](../start/syntax-primer.md)（闭包/move/Option/Result）。
+> 前置：[《进程与线程》](../os/process-thread.md)（线程/调度/阻塞）、 [《Rust 语法底座》](../start/syntax-primer.md)（闭包/move/Option/Result）。
 
-Rust 写并发有两条路，对应 [《操作系统基础》](os-basics.md) 那张三种并发单元表的两列：
+Rust 写并发有两条路，对应 [《进程与线程》](../os/process-thread.md) 那张三种并发单元表的两列：
 
 | | 路线一：OS 线程（本篇） | 路线二：异步任务（[《async 基础》](../async/basics.md) 起） |
 | --- | --- | --- |
@@ -54,7 +54,7 @@ fn main() {
 
 逐点拆解：
 
-- `thread::spawn(闭包)`：真的向 OS 申请了一个新线程（[《操作系统基础》](os-basics.md)：  
+- `thread::spawn(闭包)`：真的向 OS 申请了一个新线程（[《进程与线程》](../os/process-thread.md)：  
   独立的 8MB 栈 + 上下文），闭包在里面执行；
 - `JoinHandle<T>`：线程的遥控器，`join()` = 阻塞等它结束并取回返回值。和 [《Tokio 运行时》](../async/tokio.md) 的 JoinHandle 长得像不是巧合——tokio 就是照着它设计的，  
   区别是 tokio 版用 `.await` 等（挂起任务），这里用 `.join()` 等（阻塞线程）；
@@ -129,7 +129,7 @@ fn main() {
 - 为什么必须 `Arc`：`thread::spawn` 和 `tokio::spawn` 一样要求闭包 `'static` + 捕获物 `Send`—— **`Send`/`Sync` 体检对 OS 线程同样生效**，  
   毕竟这套机制本来就是为线程设计的，异步任务只是沿用；
 - 把 `Mutex` 拿掉直接 `+= 1`？编译不过（`Arc` 里的数据不可变，需要内部可变性）；用 `unsafe` 强行绕过？  
-  那就是 [《操作系统基础》](os-basics.md) 说的数据竞争，结果随机少——Go 里 `-race` 才能抓到的问题，  
+  那就是 [《进程与线程》](../os/process-thread.md) 说的数据竞争，结果随机少——Go 里 `-race` 才能抓到的问题，  
   Rust 在这里根本写不出来；
 - 对照 Go：`var mu sync.Mutex; var n int` + `go func(){ mu.Lock(); n++; mu.Unlock() }()`——形状一样，  
   区别是 Go 的锁和数据靠自觉配对，Rust 的数据锁在 `Mutex` 里面。

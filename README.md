@@ -23,13 +23,14 @@
 
 # 全书怎么组织
 
-按主题分成八组，由浅入深；括号里是该组解决的问题。
+按主题分成九组，由浅入深；括号里是该组解决的问题。
 
 | 分组 | 解决什么 | 关键章节 |
 | --- | --- | --- |
 | **开始** | 装好环境、建立 Go→Rust 心智地图 | [《环境与工具链》](docs/start/toolchain.md)、 [《Go → Rust 语言对照》](docs/start/go-vs-rust.md)、 [《Rust 语法底座》](docs/start/syntax-primer.md) |
 | **语言地基** | 从基础类型到所有权、集合、智能指针、错误处理 | [《基础类型》](docs/lang/basics.md) → [《流程控制》](docs/lang/control-flow.md) → [《所有权与借用》](docs/lang/ownership.md) → [《函数与闭包》](docs/lang/functions-closures.md) → [《生命周期》](docs/lang/lifetimes.md) → …（完整列表见侧栏） |
-| **并发基础** | 补齐 OS 词汇 + 线程模型，给异步一个参照系 | [《操作系统基础》](docs/concurrency/os-basics.md)、 [《Rust 多线程与并发》](docs/concurrency/threads.md)、 [《Go 并发实现（GMP）》](docs/concurrency/go-gmp.md) |
+| **操作系统** | 组成原理、CPU/内存/磁盘、进程线程、调度、fd、阻塞与 epoll 等硬实力地基 | [《计算机组成入门》](docs/os/computer-basics.md) → [《进程与线程》](docs/os/process-thread.md) → [《阻塞与 IO 多路复用》](docs/os/blocking-io.md) → …（完整列表见侧栏） |
+| **并发基础** | Rust 线程模型 + Go GMP 参照系 | [《Rust 多线程与并发》](docs/concurrency/threads.md)、 [《Go 并发实现（GMP）》](docs/concurrency/go-gmp.md) |
 | **网络编程** | 从分层、Socket、TCP/UDP 到 HTTP/TLS/长连接/RPC，再到排障与进阶 | [《网络分层与模型》](docs/network/layers.md) → [《Socket 详解》](docs/network/socket.md) → [《TCP 保姆级》](docs/network/tcp.md) → [《HTTP 协议入门》](docs/network/http-protocol.md) → …（完整列表见侧栏） |
 | **异步主线** | async/await、Tokio、共享状态、并发工具箱 | [《async 基础》](docs/async/basics.md)、 [《Tokio 运行时》](docs/async/tokio.md)、 [《共享状态：Arc / RwLock》](docs/async/shared-state.md)、 [《超时、限流与任务组》](docs/async/task-control.md)、 [《通知与热更新》](docs/async/notify-watch.md)、 [《生产任务生命周期》](docs/async/service-lifecycle.md) |
 | **HTTP 服务** | 从裸 TCP 手写 HTTP 到 axum，再到请求上游、数据库和缓存 | [《从零手写 HTTP》](docs/http/http-from-scratch.md)、 [《axum 入门》](docs/http/axum.md)、 [《JSON 序列化与反序列化》](docs/http/serde-json.md)、 [《读写接口与错误处理》](docs/http/rest.md)、 [《ArcSwap 无锁读》](docs/http/arcswap.md)、 [《中间件与优雅退出》](docs/http/middleware-shutdown.md)、 [《reqwest 与上游容错》](docs/http/reqwest-resilience.md)、 [《接入 Redis》](docs/http/redis.md)、 [《Redis Cluster》](docs/http/redis-cluster.md)、 [《sqlx 数据库》](docs/http/sqlx.md) |
@@ -44,8 +45,10 @@
 # 推荐阅读顺序
 
 - **想尽快跑起服务**：开始 → 语言地基（重点啃 [《所有权与借用》](docs/lang/ownership.md) +  
-  [《生命周期》](docs/lang/lifetimes.md)）→ 并发基础 → 网络编程 → 异步主线 → HTTP 服务，工程实践按需补。
-- **网络是黑盒、只会写业务接口**：并发基础之后，按侧栏「网络编程」从上到下读；  
+  [《生命周期》](docs/lang/lifetimes.md)）→ 操作系统 → 并发基础 → 网络编程 → 异步主线 → HTTP 服务，工程实践按需补。
+- **对机器如何工作几乎没概念**：先按侧栏「操作系统」读完组成、CPU/内存、进程线程、  
+  用户态、阻塞 IO，再进并发与网络。
+- **网络是黑盒、只会写业务接口**：操作系统之后，按侧栏「网络编程」从上到下读；  
   至少读完分层、寻址、Socket、TCP、HTTP 协议、超时重试，再进 HTTP 服务组。
 - **想稳扎稳打**：按侧边栏从上到下通读；所有权两章是全书承重墙，值得花最多时间。
 - **已在改真实 Rust 项目**：先读一章 → 去对应 `code/<目录-文件名>/` 找示例 → 再回来对照。
@@ -76,6 +79,22 @@ cargo run -p lang-basics
 cargo run -p lang-ownership
 cargo run -p lang-functions-closures
 cargo run -p concurrency-threads
+# —— 操作系统（一章一 crate）——
+cargo run -p os-computer-basics
+cargo run -p os-cpu-memory
+cargo run -p os-disk-io
+cargo run -p os-process-thread
+cargo run -p os-user-kernel
+cargo run -p os-scheduling
+cargo run -p os-coroutine-state
+cargo run -p os-virtual-memory
+cargo run -p os-file-fd
+cargo run -p os-blocking-io
+cargo run -p os-sync-primitives
+cargo run -p os-perf-cost
+cargo run -p os-signals-lifecycle
+cargo run -p os-time-clock
+cargo run -p os-cgroup-container
 # —— 网络编程（一章一 crate）——
 cargo run -p network-layers            # 分层与地址直觉
 cargo run -p network-addressing        # IP / 端口 / DNS

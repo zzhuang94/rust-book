@@ -1,0 +1,11 @@
+[package]
+name = "os-coroutine-state"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/coroutine-state.md
+# 运行（在 code/ 下）：cargo run -p os-coroutine-state
+# 全部标准库，不用 async/tokio——就是要手写一个状态机，对照理解 Future。
+
+[dependencies]
+labkit = { workspace = true }

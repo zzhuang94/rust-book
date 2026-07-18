@@ -1,0 +1,11 @@
+[package]
+name = "os-process-thread"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/process-thread.md
+# 运行（在 code/ 下）：cargo run -p os-process-thread
+# 全部标准库，不需要 tokio。
+
+[dependencies]
+labkit = { workspace = true }

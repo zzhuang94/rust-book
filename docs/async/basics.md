@@ -153,7 +153,7 @@ async fn say(name: &str, delay_ms: u64) -> String {
 - 签名写着 `-> String`，但 `say(...)` 的 **真实返回类型** 是 `impl Future<Output = String>`；
 - 编译器把 async 函数体 **改写成一个实现了 `Future` trait 的状态机**。
 
-「状态机」这个词本身是什么意思（红绿灯的例子、手工改写演示、为什么暂停/恢复因此变成零成本）， [《操作系统基础》](../concurrency/os-basics.md) 有保姆级解释，  
+「状态机」这个词本身是什么意思（红绿灯的例子、手工改写演示、为什么暂停/恢复因此变成零成本）， [《协程与状态机》](../os/coroutine-state.md) 有保姆级解释，  
 第一次见这个词请先去读它。
 
 `Future` trait 长这样（简化）：
@@ -190,7 +190,7 @@ enum Poll<T> {
 代价是心智负担从运行时挪到编译期（你会看到 Future、Pin 这些词）。
 
 > 🔬 **底层视角**：一段代码「执行到哪了」，本质是 CPU 寄存器的当前值；OS 线程能暂停/恢复，靠内核把这些寄存器存进线程上下文、  
-> 恢复时再装回去（见 [《操作系统基础》](../concurrency/os-basics.md)）。goroutine 的「有自己的栈」是同一思路的用户态复刻：  
+> 恢复时再装回去（见 [《协程与状态机》](../os/coroutine-state.md)）。goroutine 的「有自己的栈」是同一思路的用户态复刻：  
 > Go 给每个 goroutine 配一份小栈 + 寄存器快照，切换时就换这两样。而 Rust 的状态机干脆 **不存寄存器也不留栈** ——编译器提前算好「每个暂停点需要保留哪些变量」，  
 > 把它们直接变成 enum 的字段；恢复执行 = 普通地调一次 poll + match 到对应状态，连「快照」这道工序都省了。  
 > 这就是三种方案的体积差（OS 线程 ~8MB / goroutine ~2KB / Future 几十字节）的真正来源：  
@@ -263,7 +263,7 @@ loop {
 > - 需要阻塞/重计算 → `tokio::spawn_blocking`（[《Tokio 运行时》](tokio.md)）；
 > - Go 不太有这问题（调度器会在阻塞系统调用时补线程），这是两者运行时设计的重要差异。
 > - 场景(5) 的 `say_blocking` 就是这条铁律的现场演示。「阻塞」在操作系统层面的确切含义——线程被内核挂起、  
-> 期间它背着的一切停摆——见 [《操作系统基础》](../concurrency/os-basics.md)。
+> 期间它背着的一切停摆——见 [《协程与状态机》](../os/coroutine-state.md)。
 
 ----
 
@@ -302,7 +302,7 @@ let (a, b) = tokio::join!(say("A", 100), say("B", 100));
 - **并行（parallelism）**：多个任务真的同时各占一个 CPU 核。要 `tokio::spawn` 到多线程运行时才谈得上（[《Tokio 运行时》](tokio.md)）；
 - Go 对照：`join!` ≈ 两个 goroutine + `WaitGroup.Wait()`，但 Go 的 goroutine 可能真并行，  
   `join!` 的子 Future 在同一任务内交替；
-- 🔬 用 [《操作系统基础》](../concurrency/os-basics.md) 的话说：`join!` 只提供「并发的 **结构**」——它整体是一个任务，  
+- 🔬 用 [《协程与状态机》](../os/coroutine-state.md) 的话说：`join!` 只提供「并发的 **结构**」——它整体是一个任务，  
   同一时刻只被一个工作线程 poll， **永远吃不到第二个 CPU 核**。想吃多核（并行的 **资源**），得 spawn 成独立任务，  
   调度器才有机会把它们放到不同线程/不同核上（[《Tokio 运行时》](tokio.md)）。
 

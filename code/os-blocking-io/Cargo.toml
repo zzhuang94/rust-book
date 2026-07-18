@@ -1,0 +1,11 @@
+[package]
+name = "os-blocking-io"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/blocking-io.md
+# 运行（在 code/ 下）：cargo run -p os-blocking-io
+
+[dependencies]
+tokio = { workspace = true }
+labkit = { workspace = true }

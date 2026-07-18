@@ -1756,6 +1756,114 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7c87def4c32ab89d880effc9e097653c8da5d6ef28e6b539d313baaacfbafcbe"
 
 [[package]]
+name = "os-blocking-io"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+ "tokio",
+]
+
+[[package]]
+name = "os-cgroup-container"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-computer-basics"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-coroutine-state"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-cpu-memory"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-disk-io"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-file-fd"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-perf-cost"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-process-thread"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-scheduling"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-signals-lifecycle"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "labkit",
+ "tokio",
+]
+
+[[package]]
+name = "os-sync-primitives"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-time-clock"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-user-kernel"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
+name = "os-virtual-memory"
+version = "0.1.0"
+dependencies = [
+ "labkit",
+]
+
+[[package]]
 name = "parking"
 version = "2.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -1,0 +1,11 @@
+[package]
+name = "os-time-clock"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/time-clock.md
+# 运行（在 code/ 下）：cargo run -p os-time-clock
+# 全部标准库。
+
+[dependencies]
+labkit = { workspace = true }

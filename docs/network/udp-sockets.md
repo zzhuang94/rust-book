@@ -8,7 +8,7 @@
 
 先别被 `socket2` 吓住。整段程序只做一件事：服务端收到 `ping`，回一个 `pong`。
 我们先弄清 UDP，再把 Rust 标准库、Tokio 和操作系统 socket 接起来。
-如果“非阻塞、系统调用、端口”还是生词，先读 [《操作系统基础》](../concurrency/os-basics.md)。
+如果“非阻塞、系统调用、端口”还是生词，先读 [《阻塞与 IO 多路复用》](../os/blocking-io.md)。
 
 建议先读 [《分层是为了解耦》](layers.md) →
 [《地址决定连去哪》](addressing.md) →

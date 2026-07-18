@@ -1,0 +1,11 @@
+[package]
+name = "os-cgroup-container"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/cgroup-container.md
+# 运行（在 code/ 下）：cargo run -p os-cgroup-container
+# 全部标准库，只读几个约定路径，不需要特权、不做任何破坏性操作。
+
+[dependencies]
+labkit = { workspace = true }

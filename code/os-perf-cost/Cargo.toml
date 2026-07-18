@@ -1,0 +1,11 @@
+[package]
+name = "os-perf-cost"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/perf-cost.md
+# 运行（在 code/ 下）：cargo run -p os-perf-cost（建议 --release 观察更明显）
+# 全部标准库，不需要 tokio。
+
+[dependencies]
+labkit = { workspace = true }

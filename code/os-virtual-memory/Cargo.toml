@@ -1,0 +1,11 @@
+[package]
+name = "os-virtual-memory"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/virtual-memory.md
+# 运行（在 code/ 下）：cargo run -p os-virtual-memory
+# 全部标准库；分配大小控制在几十 MB，不会卡机器。
+
+[dependencies]
+labkit = { workspace = true }

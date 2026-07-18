@@ -1,0 +1,11 @@
+[package]
+name = "os-cpu-memory"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/cpu-memory.md
+# 运行（在 code/ 下）：cargo run -p os-cpu-memory
+# 全部标准库，不需要 tokio。
+
+[dependencies]
+labkit = { workspace = true }

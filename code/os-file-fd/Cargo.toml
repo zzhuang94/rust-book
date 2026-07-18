@@ -1,0 +1,11 @@
+[package]
+name = "os-file-fd"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/file-fd.md
+# 运行（在 code/ 下）：cargo run -p os-file-fd
+# 全部标准库。
+
+[dependencies]
+labkit = { workspace = true }

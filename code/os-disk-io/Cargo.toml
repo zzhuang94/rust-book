@@ -1,0 +1,11 @@
+[package]
+name = "os-disk-io"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/disk-io.md
+# 运行（在 code/ 下）：cargo run -p os-disk-io
+# 全部标准库 std::fs / std::io，不需要 tempfile 之类第三方 crate。
+
+[dependencies]
+labkit = { workspace = true }

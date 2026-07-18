@@ -1,0 +1,11 @@
+[package]
+name = "os-scheduling"
+version = "0.1.0"
+edition = "2021"
+
+# 配套文档：docs/os/scheduling.md
+# 运行（在 code/ 下）：cargo run -p os-scheduling
+# 全部标准库，不需要 tokio。控制在几秒内跑完。
+
+[dependencies]
+labkit = { workspace = true }
