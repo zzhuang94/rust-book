@@ -5,7 +5,9 @@
 :root {
   --font-scale: 1;
   --sidebar-width: 248px;
-  --content-max-width: 1120px;
+  /* 桌面端正文可稍宽，少留两侧空白；再宽的屏用下面 media 再抬一档 */
+  --content-max-width: 1400px;
+  --content-pad-x: clamp(1.1rem, 1.8vw, 1.75rem);
 
   /* Light theme (default) */
   --bg-color: #ffffff;
@@ -309,7 +311,7 @@ body.close .content {
   font-size: calc(16.5px * var(--font-scale, 1)) !important;
   line-height: 1.72;
   margin: 0 auto !important;
-  padding: 1.6rem clamp(1.5rem, 4vw, 4rem) 4rem !important;
+  padding: 1.6rem var(--content-pad-x) 4rem !important;
   max-width: var(--content-max-width) !important;
   width: 100% !important;
   box-sizing: border-box !important;
@@ -317,6 +319,21 @@ body.close .content {
   word-wrap: break-word;
   min-width: 0;
   color: var(--text-color) !important;
+}
+
+/* 宽屏：正文再吃掉一点两侧留白（TOC 仍在右侧时也不至于中间一条细带） */
+@media (min-width: 1440px) {
+  :root {
+    --content-max-width: 1560px;
+    --content-pad-x: clamp(1rem, 1.4vw, 1.5rem);
+  }
+}
+
+@media (min-width: 1800px) {
+  :root {
+    --content-max-width: 1680px;
+    --content-pad-x: 1.25rem;
+  }
 }
 
 .markdown-section h1 { font-size: 1.9em !important; }
